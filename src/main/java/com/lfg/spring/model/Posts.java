@@ -1,19 +1,18 @@
 package com.lfg.spring.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
-public class Post {
+public class Posts {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String title;
-    private String subject;
+    private String body;
+
 
     public Long getId() {
         return id;
@@ -31,11 +30,12 @@ public class Post {
         this.title = title;
     }
 
-    public String getSubject() {
-        return subject;
+    public String getBody() {
+        return body;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setBody(String body) {
+        this.body = body;
     }
+
 }
