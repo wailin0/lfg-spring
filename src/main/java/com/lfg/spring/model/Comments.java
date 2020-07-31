@@ -6,32 +6,32 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Dislikes {
+public class Comments {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
-    private boolean voted;
+    private String body;
 
     private Long userId;
 
     private Long postId;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public boolean isVoted() {
-        return voted;
+    public String getBody() {
+        return body;
     }
 
-    public void setVoted(boolean voted) {
-        this.voted = voted;
+    public void setBody(String body) {
+        this.body = body;
     }
 
     public Long getUserId() {

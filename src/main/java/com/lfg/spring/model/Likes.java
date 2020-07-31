@@ -12,7 +12,7 @@ public class Likes {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    private boolean voted;
+    private boolean liked;
 
     private Long userId;
 
@@ -26,12 +26,12 @@ public class Likes {
         this.id = id;
     }
 
-    public boolean isVoted() {
-        return voted;
+    public boolean isLiked() {
+        return liked;
     }
 
-    public void setVoted(boolean voted) {
-        this.voted = voted;
+    public void setLiked(boolean liked) {
+        this.liked = liked;
     }
 
     public Long getUserId() {

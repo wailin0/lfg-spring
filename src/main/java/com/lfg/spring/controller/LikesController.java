@@ -14,26 +14,61 @@ public class LikesController {
     @Autowired
     private LikesRepository likesRepository;
 
-    @GetMapping("/post/{postId}/like")
-    public Set<Likes> getLikesByPostId (@PathVariable Long postId) {
-        return likesRepository.findByPostId(postId);
+    @GetMapping("/post/{postId}/{vote}")
+    public Set<Likes> getLikesByPostId (@PathVariable Long postId, @PathVariable String vote) {
+        if(vote.equals("like")) {
+            return likesRepository.findByPostIdAndLiked(postId, true);
+        }
+        else if(vote.equals("dislike")){
+            return likesRepository.findByPostIdAndLiked(postId, false);
+        }
+        return null;
     }
 
-    @PostMapping("/like")
-    public void saveUserLikeByPostId (@RequestBody Likes like) {
-        likesRepository.save(like);
+    @PostMapping("/{vote}")
+    public void saveUserLikeByPostId (@PathVariable String vote, @RequestBody Likes like) {
+        if(vote.equals("like")) {
+            likesRepository.save(like);
+        }
+        else if(vote.equals("dislike")){
+            likesRepository.save(like);
+        }
     }
 
-    @GetMapping("/like/post/{postId}/user/{userId}")
-    public Likes getUserLikeByPostIdAndUserId(@PathVariable Long postId, @PathVariable Long userId){
-        return likesRepository.findByPostIdAndUserId(postId, userId);
+    @PutMapping("/like/post/{postId}/user/{userId}")
+    public void changeVote(@PathVariable Long postId,
+                           @PathVariable Long userId,
+                           @RequestBody Likes like){
+        Likes voteToChange = likesRepository.findByPostIdAndUserId(postId, userId);
+        voteToChange.setLiked(like.isLiked());
+        likesRepository.save(voteToChange);
     }
 
-    @DeleteMapping("/like/post/{postId}/user/{userId}")
-    public void deleteUserLikeByPostIdAndUserId(@PathVariable Long postId,@PathVariable Long userId){
+    @GetMapping("/{vote}/post/{postId}/user/{userId}")
+    public Likes getUserLikeByPostIdAndUserId(@PathVariable String vote, @PathVariable Long postId, @PathVariable Long userId){
+        if(vote.equals("like")) {
+            return likesRepository.findByPostIdAndUserIdAndLiked(postId, userId, true);
+        }
+        else if(vote.equals("dislike")){
+            return likesRepository.findByPostIdAndUserIdAndLiked(postId, userId, false);
+        }
+        return null;
+    }
+
+
+    @DeleteMapping("/{remove}/post/{postId}/user/{userId}")
+    public void deleteUserLikeByPostIdAndUserId(@PathVariable String remove,
+                                                @PathVariable Long postId,
+                                                @PathVariable Long userId){
         // to do
         // if requested user id = login user id
-        likesRepository.deleteByPostIdAndUserId(postId, userId);
+        if(remove.equals("like")) {
+            likesRepository.deleteByPostIdAndUserIdAndLiked(postId, userId, true);
+        }
+        else if(remove.equals("dislike")){
+            likesRepository.deleteByPostIdAndUserIdAndLiked(postId, userId, false);
+        }
     }
+
 
 }

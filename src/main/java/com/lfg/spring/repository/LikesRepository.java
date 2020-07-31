@@ -10,9 +10,13 @@ import java.util.Set;
 @Repository
 @Transactional
 public interface LikesRepository extends JpaRepository<Likes, Long> {
-    Set<Likes> findByPostId(Long postId);
 
-    void deleteByPostIdAndUserId(Long postId, Long userId);
+
+    Set<Likes> findByPostIdAndLiked(Long postId, boolean liked);
+
+    void deleteByPostIdAndUserIdAndLiked(Long postId, Long userId, boolean liked);
+
+    Likes findByPostIdAndUserIdAndLiked(Long postId, Long userId, boolean liked);
 
     Likes findByPostIdAndUserId(Long postId, Long userId);
 }
