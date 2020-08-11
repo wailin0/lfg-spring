@@ -1,18 +1,22 @@
 package com.lfg.spring.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Comments {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String body;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.DATE)
+    private Date createdDate;
 
     private Long userId;
 
@@ -36,6 +40,14 @@ public class Comments {
 
     public Long getUserId() {
         return userId;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public void setUserId(Long userId) {

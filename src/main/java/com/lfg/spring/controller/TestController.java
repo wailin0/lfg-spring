@@ -1,0 +1,83 @@
+package com.lfg.spring.controller;
+
+import com.lfg.spring.JWT.JWTRequest;
+import com.lfg.spring.JWT.JWTResponse;
+import com.lfg.spring.JWT.JWTUtil;
+import com.lfg.spring.model.Users;
+import com.lfg.spring.service.UserDetailsServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.Objects;
+
+@CrossOrigin
+@RestController
+public class TestController {
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsServiceImpl;
+
+    @Autowired
+    private JWTUtil jwtUtil;
+
+    @GetMapping("/test")
+    public String getTest(){
+        return "fuuuuuu";
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> createAuthenticationToken(@RequestBody JWTRequest jwtRequest)
+            throws Exception {
+        authenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
+        final UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(jwtRequest.getUsername());
+        final String token = jwtUtil.generateToken(userDetails);
+        System.out.println(token);
+        return ResponseEntity.ok(new JWTResponse(token));
+    }
+    @GetMapping("/login")
+    public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
+        String authToken = request.getHeader("Authorization");
+        final String token = authToken.substring(7);
+        String username = jwtUtil.getUsernameFromToken(token);
+        Users user = (Users) userDetailsServiceImpl.loadUserByUsername(username);
+        if (jwtUtil.canTokenBeRefreshed(token)) {
+            String refreshedToken = jwtUtil.refreshToken(token);
+            return ResponseEntity.ok(new JWTResponse(refreshedToken));
+        } else {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+    @ExceptionHandler({ AuthenticationException.class })
+    public ResponseEntity<String> handleAuthenticationException(AuthenticationException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+    private void authenticate(String username, String password) throws Exception {
+        Objects.requireNonNull(username);
+        Objects.requireNonNull(password);
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        } catch (DisabledException e) {
+            throw new Exception("USER_DISABLED", e);
+        } catch (BadCredentialsException e) {
+            throw new Exception("INVALID_CREDENTIALS", e);
+        }
+    }
+
+
+}

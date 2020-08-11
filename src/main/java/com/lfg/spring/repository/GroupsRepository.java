@@ -1,13 +1,14 @@
 package com.lfg.spring.repository;
 
-import com.lfg.spring.model.Users;
+import com.lfg.spring.model.Groups;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Transactional
 @Repository
-public interface UsersRepository extends JpaRepository<Users, Long> {
-    Users findByUsername(String email);
+public interface GroupsRepository extends JpaRepository<Groups, Long> {
+    List<Groups> findByTopic(String topic);
 }

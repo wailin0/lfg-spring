@@ -7,23 +7,21 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-public class Posts {
+public class Groups {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String title;
-    private String body;
+    private String name;
 
-    private Long userId;
+    private String topic;
 
-    private Long groupId;
+    private boolean disabled;
 
     @CreationTimestamp
     @Temporal(TemporalType.DATE)
     private Date createdDate;
-
 
     public Long getId() {
         return id;
@@ -33,36 +31,28 @@ public class Posts {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getBody() {
-        return body;
+    public boolean isDisabled() {
+        return disabled;
     }
 
-    public Long getUserId() {
-        return userId;
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public String getTopic() {
+        return topic;
     }
 
-    public Long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
-    }
-
-    public void setBody(String body) {
-        this.body = body;
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     public Date getCreatedDate() {

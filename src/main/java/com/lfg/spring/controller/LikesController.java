@@ -61,7 +61,7 @@ public class LikesController {
                                                 @PathVariable Long postId,
                                                 @PathVariable Long userId){
         // to do
-        // if requested user id = login user id
+        // replace with authorized userID
         if(remove.equals("like")) {
             likesRepository.deleteByPostIdAndUserIdAndLiked(postId, userId, true);
         }

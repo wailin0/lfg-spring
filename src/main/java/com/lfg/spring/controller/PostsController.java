@@ -18,14 +18,19 @@ public class PostsController {
         return postsRepository.findAll();
     }
 
+    @GetMapping("/post/group/{groupId}")
+    public List<Posts> getPostsByGroupId(@PathVariable Long groupId) {
+        return postsRepository.findByGroupId(groupId);
+    }
+
     @PostMapping("/post")
     public void savePost(@RequestBody Posts post){
         postsRepository.save(post);
     }
 
-    @DeleteMapping("/post/{postId}")
-    public void deletePost(@PathVariable Long postId){
-        postsRepository.deleteById(postId);
+    @DeleteMapping("/post/{postId}/group/{groupId}")
+    public void deletePost(@PathVariable Long postId, @PathVariable Long groupId){
+        postsRepository.deleteByIdAndGroupId(postId, groupId);
     }
 
 }

@@ -1,21 +1,27 @@
 package com.lfg.spring.model;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class Users {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String username;
     private String email;
     private String password;
 
+    private boolean isEnabled;
+    private String role;
+
+    @CreationTimestamp
+    @Temporal(TemporalType.DATE)
+    private Date createdDate;
 
     public Long getId() {
         return id;
@@ -25,12 +31,28 @@ public class Users {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public boolean isEnabled() {
+        return isEnabled;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public void setEnabled(boolean enabled) {
+        isEnabled = enabled;
     }
 
     public String getEmail() {
@@ -47,5 +69,13 @@ public class Users {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 }
