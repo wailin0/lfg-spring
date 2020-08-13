@@ -43,19 +43,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
-                .authorizeRequests().antMatchers("/login","/register").permitAll()
-                .antMatchers("/test").hasRole("USER")
+                .authorizeRequests().antMatchers("/","/login","/register","/validation/**/**").permitAll()
+                .antMatchers(HttpMethod.GET,"/post/**/**","/group","comment/**/**").permitAll()
+                .antMatchers(HttpMethod.OPTIONS).permitAll()  //need for cors pre check
+                .antMatchers(HttpMethod.POST).hasRole("USER")
+                .antMatchers(HttpMethod.PUT).hasRole("USER")
+                .antMatchers(HttpMethod.DELETE).hasRole("USER")
                 .anyRequest().authenticated();
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         http.headers().frameOptions().sameOrigin().cacheControl();
-    }
-
-
-    @Override
-    public void configure(WebSecurity webSecurity) throws Exception {
-        webSecurity
-                .ignoring()
-                .antMatchers("/h2-console/**/**");//Should not be in Production!
     }
 
     @Override

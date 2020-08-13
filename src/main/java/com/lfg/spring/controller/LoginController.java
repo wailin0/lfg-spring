@@ -25,7 +25,7 @@ import java.util.Objects;
 
 @CrossOrigin
 @RestController
-public class TestController {
+public class LoginController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -37,8 +37,8 @@ public class TestController {
     private JWTUtil jwtUtil;
 
     @GetMapping("/test")
-    public String getTest(){
-        return "fuuuuuu";
+    public ResponseEntity<?> getTest(){
+        return ResponseEntity.ok("ffuuuuuufufuffu");
     }
 
     @PostMapping("/login")
@@ -47,7 +47,6 @@ public class TestController {
         authenticate(jwtRequest.getUsername(), jwtRequest.getPassword());
         final UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(jwtRequest.getUsername());
         final String token = jwtUtil.generateToken(userDetails);
-        System.out.println(token);
         return ResponseEntity.ok(new JWTResponse(token));
     }
     @GetMapping("/login")
@@ -68,8 +67,6 @@ public class TestController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
     private void authenticate(String username, String password) throws Exception {
-        Objects.requireNonNull(username);
-        Objects.requireNonNull(password);
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
@@ -78,6 +75,5 @@ public class TestController {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
-
 
 }

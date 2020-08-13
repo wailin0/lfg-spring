@@ -10,4 +10,8 @@ import javax.transaction.Transactional;
 @Repository
 public interface UsersRepository extends JpaRepository<Users, Long> {
     Users findByUsername(String email);
+
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
 }
