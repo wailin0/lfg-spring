@@ -47,7 +47,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/","/login","/register","/validation/**/**").permitAll()
                 .antMatchers(HttpMethod.GET).permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()  //need for cors pre check
-                .antMatchers(HttpMethod.POST).hasRole("USER")
                 .antMatchers(HttpMethod.PUT).hasRole("USER")
                 .antMatchers(HttpMethod.DELETE).hasRole("USER");
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
