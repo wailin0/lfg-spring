@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 @Transactional
 @Repository
 public interface UsersRepository extends JpaRepository<Users, Long> {
-    Users findByUsername(String email);
+    Users findByUsername(String username);
 
     boolean existsByUsername(String username);
 

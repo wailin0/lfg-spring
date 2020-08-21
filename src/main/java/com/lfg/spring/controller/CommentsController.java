@@ -9,6 +9,7 @@ import java.util.Set;
 
 @CrossOrigin
 @RestController
+@RequestMapping("/api/auth")
 public class CommentsController {
 
     @Autowired

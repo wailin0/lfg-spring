@@ -4,14 +4,13 @@ import com.lfg.spring.model.Users;
 import com.lfg.spring.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin
 @RestController
+@RequestMapping("/api/all")
 public class RegisterController {
 
     @Autowired
@@ -19,11 +18,6 @@ public class RegisterController {
 
 //    @Autowired
 //    private BCryptPasswordEncoder encoder;
-
-    @GetMapping("/user/{id}")
-    public Optional<Users> getUserById(@PathVariable("id") Long userId) {
-        return usersRepository.findById(userId);
-    }
 
 
     @GetMapping("/register")

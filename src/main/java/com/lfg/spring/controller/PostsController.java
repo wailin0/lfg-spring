@@ -13,22 +13,22 @@ public class PostsController {
     @Autowired
     private PostsRepository postsRepository;
 
-    @GetMapping("/post")
+    @GetMapping("/api/all/post")
     public List<Posts> getAllPost(){
         return postsRepository.findAll();
     }
 
-    @GetMapping("/post/group/{groupId}")
+    @GetMapping("/api/auth/post/group/{groupId}")
     public List<Posts> getPostsByGroupId(@PathVariable Long groupId) {
         return postsRepository.findByGroupId(groupId);
     }
 
-    @PostMapping("/post")
+    @PostMapping("/api/auth/post")
     public void savePost(@RequestBody Posts post){
         postsRepository.save(post);
     }
 
-    @DeleteMapping("/post/{postId}/group/{groupId}")
+    @DeleteMapping("/api/auth/post/{postId}/group/{groupId}")
     public void deletePost(@PathVariable Long postId, @PathVariable Long groupId){
         postsRepository.deleteByIdAndGroupId(postId, groupId);
     }
