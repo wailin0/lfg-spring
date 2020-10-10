@@ -1,10 +1,17 @@
 package com.lfg.spring.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Likes {
 
@@ -18,35 +25,5 @@ public class Likes {
 
     private Long postId;
 
-    public long getId() {
-        return id;
-    }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public boolean isLiked() {
-        return liked;
-    }
-
-    public void setLiked(boolean liked) {
-        this.liked = liked;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getPostId() {
-        return postId;
-    }
-
-    public void setPostId(Long postId) {
-        this.postId = postId;
-    }
 }
