@@ -26,10 +26,10 @@ public class Groups {
     private String description;
     private String type;
 
-    @OneToMany
+    @OneToMany(mappedBy = "groups")
     private List<Posts> posts;
 
-    @OneToMany
+    @OneToMany(mappedBy = "groups")
     private List<Members> members;
 
     private boolean disabled;

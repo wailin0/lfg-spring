@@ -21,10 +21,12 @@ public class Posts {
     private String title;
     private String body;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "users_id")
     private Users users;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "groups_id")
     private Groups groups;
 
     @CreationTimestamp

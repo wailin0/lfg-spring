@@ -30,7 +30,7 @@ public class Users {
     private String role;
 
 
-    @OneToMany
+    @OneToMany(mappedBy = "users")
     private List<Posts> post;
 
     @OneToOne
