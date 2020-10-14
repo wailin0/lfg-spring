@@ -10,9 +10,7 @@ import java.util.List;
 @Transactional
 @Repository
 public interface MembersRepository extends JpaRepository<Members, Long> {
-    String findByUserId(Long userId);
+    List<Members> findByGroups_Id(Long groupId);
 
-    List<Members> findByGroupId(Long groupId);
-
-    void deleteByGroupIdAndUserId(Long groupId, Long userId);
+    void deleteByGroups_IdAndUsers_Id(Long groupId, Long userId);
 }

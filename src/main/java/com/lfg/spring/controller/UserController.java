@@ -3,6 +3,7 @@ package com.lfg.spring.controller;
 import com.lfg.spring.JWT.JWTUtil;
 import com.lfg.spring.model.Users;
 import com.lfg.spring.repository.UsersRepository;
+import com.lfg.spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +22,9 @@ public class UserController {
 
     @Autowired
     private JWTUtil jwtUtil;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/user/userInfo")
     public Users getUserByUsername(HttpServletRequest request) {

@@ -1,9 +1,12 @@
 package com.lfg.spring.controller;
+
+import com.lfg.spring.JWT.JWTUtil;
 import com.lfg.spring.model.Posts;
-import com.lfg.spring.repository.PostsRepository;
+import com.lfg.spring.service.PostsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @CrossOrigin
@@ -11,26 +14,36 @@ import java.util.List;
 public class PostsController {
 
     @Autowired
-    private PostsRepository postsRepository;
+    private PostsService postsService;
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     @GetMapping("/api/all/post")
     public List<Posts> getAllPost(){
-        return postsRepository.findAll();
+        return postsService.getAllPost();
     }
 
-    @GetMapping("/api/auth/post/group/{groupId}")
+    @GetMapping("/api/all/post/{groupId}")
     public List<Posts> getPostsByGroupId(@PathVariable Long groupId) {
-        return postsRepository.findByGroupId(groupId);
+        return postsService.getAllPostFromAGroup(groupId);
     }
 
-    @PostMapping("/api/auth/post")
-    public void savePost(@RequestBody Posts post){
-        postsRepository.save(post);
+    @PostMapping("/api/auth/post/{groupId}")
+    public void savePostController(@PathVariable Long groupId, @RequestBody Posts post, HttpServletRequest request){
+        String authToken = request.getHeader("Authorization");
+        final String token = authToken.substring(7);
+        String username = jwtUtil.getUsernameFromToken(token);
+
+        postsService.savePost(username, groupId, post);
     }
 
-    @DeleteMapping("/api/auth/post/{postId}/group/{groupId}")
-    public void deletePost(@PathVariable Long postId, @PathVariable Long groupId){
-        postsRepository.deleteByIdAndGroupId(postId, groupId);
-    }
+    @DeleteMapping("/api/auth/post/{postId}")
+    public void deletePostController(@PathVariable Long postId, HttpServletRequest request) throws Exception {
+        String authToken = request.getHeader("Authorization");
+        final String token = authToken.substring(7);
+        String username = jwtUtil.getUsernameFromToken(token);
 
+        postsService.deletePost(postId, username);
+    }
 }

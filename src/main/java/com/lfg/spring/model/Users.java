@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -27,6 +28,13 @@ public class Users {
     private String password;
     private boolean isEnabled;
     private String role;
+
+
+    @OneToMany
+    private List<Posts> post;
+
+    @OneToOne
+    private Members members;
 
     @CreationTimestamp
     @Temporal(TemporalType.DATE)

@@ -10,5 +10,5 @@ import java.util.Set;
 @Transactional
 @Repository
 public interface CommentsRepository extends JpaRepository<Comments, Long> {
-    Set<Comments> findByPostId(Long postId);
+    Set<Comments> findByPosts_Id(Long postId);
 }

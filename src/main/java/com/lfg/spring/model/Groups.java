@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -18,9 +19,18 @@ public class Groups {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String name;
 
     private String topic;
+    private String description;
+    private String type;
+
+    @OneToMany
+    private List<Posts> posts;
+
+    @OneToMany
+    private List<Members> members;
 
     private boolean disabled;
 

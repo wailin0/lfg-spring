@@ -18,9 +18,11 @@ public class Members {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long userId;
+    @OneToOne
+    private Users users;
 
-    private Long groupId;
+    @ManyToOne
+    private Groups groups;
 
     private String role;
 

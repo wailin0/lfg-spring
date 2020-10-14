@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface PostsRepository extends JpaRepository<Posts, Long> {
 
-    void deleteByIdAndGroupId(Long postId, Long groupId);
+    void deleteById(Long postId);
 
-    List<Posts> findByGroupId(Long groupId);
+    List<Posts> findByGroups_Id(Long groupId);
 }

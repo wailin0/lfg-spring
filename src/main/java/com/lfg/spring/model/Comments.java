@@ -24,8 +24,10 @@ public class Comments {
     @Temporal(TemporalType.DATE)
     private Date createdDate;
 
-    private Long userId;
+    @ManyToOne
+    private Users users;
 
-    private Long postId;
+    @ManyToOne
+    private Posts posts;
 
 }

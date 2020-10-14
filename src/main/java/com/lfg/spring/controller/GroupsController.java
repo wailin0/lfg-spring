@@ -1,12 +1,13 @@
 package com.lfg.spring.controller;
 
+import com.lfg.spring.JWT.JWTUtil;
 import com.lfg.spring.model.Groups;
-import com.lfg.spring.model.Members;
 import com.lfg.spring.repository.GroupsRepository;
-import com.lfg.spring.repository.MembersRepository;
+import com.lfg.spring.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @CrossOrigin
@@ -15,10 +16,13 @@ import java.util.List;
 public class GroupsController {
 
     @Autowired
+    private GroupService groupService;
+
+    @Autowired
     private GroupsRepository groupsRepository;
 
     @Autowired
-    private MembersRepository membersRepository;
+    private JWTUtil jwtUtil;
 
     @GetMapping("/group")
     public List<Groups> getAllGroup() {
@@ -31,14 +35,13 @@ public class GroupsController {
     }
 
 
-    @PostMapping("/group/{userId}")
-    public void createGroup(@PathVariable Long userId, @RequestBody Groups group) {
-        groupsRepository.save(group);
-        Members members = new Members();  //make first member admin
-        members.setGroupId(group.getId());
-        members.setRole("ADMIN");
-        members.setUserId(userId);
-        membersRepository.save(members);
+    @PostMapping("/group/createGroup")
+    public void createGroup(@RequestBody Groups group, HttpServletRequest request) {
+        String authToken = request.getHeader("Authorization");
+        final String token = authToken.substring(7);
+        String username = jwtUtil.getUsernameFromToken(token);
+
+        groupService.createGroup(username, group);
     }
 
 }

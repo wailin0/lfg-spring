@@ -2,6 +2,7 @@ package com.lfg.spring.controller;
 
 import com.lfg.spring.model.Users;
 import com.lfg.spring.repository.UsersRepository;
+import com.lfg.spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,8 +17,9 @@ public class RegisterController {
     @Autowired
     private UsersRepository usersRepository;
 
-//    @Autowired
-//    private BCryptPasswordEncoder encoder;
+    @Autowired
+    private UserService userService;
+
 
 
     @GetMapping("/register")
@@ -25,8 +27,11 @@ public class RegisterController {
         return usersRepository.findAll();
     }
 
+
+    // register user
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody Users user){
+        System.out.println(user.getUsername());
         if (usersRepository.existsByUsername(user.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -36,15 +41,14 @@ public class RegisterController {
         else if (usersRepository.existsByEmail(user.getEmail())) {
             return ResponseEntity
                     .badRequest()
-                    .body("Error: Account with email already exist");
+                    .body("Error: Account with that email already exist");
         }
-//      user.setPassword(encoder.encode(user.getPassword()));
-        user.setEnabled(true);
-        user.setRole("USER");
-        usersRepository.save(user);
-
+        userService.registerUser(user);
         return ResponseEntity.ok("User Registration successful");
     }
+
+
+    // for async checking username and email while registering
 
     @GetMapping("/validation/username/{username}")
     @ResponseBody

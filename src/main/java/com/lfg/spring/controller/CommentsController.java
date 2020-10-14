@@ -15,12 +15,12 @@ public class CommentsController {
     @Autowired
     private CommentsRepository commentsRepository;
 
-    @GetMapping("/comment/post/{postId}")
+    @GetMapping("/comment/{postId}")
     public Set<Comments> getCommentsByPostId(@PathVariable Long postId) {
-        return commentsRepository.findByPostId(postId);
+        return commentsRepository.findByPosts_Id(postId);
     }
 
-    @PostMapping("/comment")
+    @PostMapping("/comment/{postId}")
     public void saveComment(@RequestBody Comments comments){
         commentsRepository.save(comments);
     }

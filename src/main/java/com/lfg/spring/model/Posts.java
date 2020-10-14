@@ -21,9 +21,11 @@ public class Posts {
     private String title;
     private String body;
 
-    private Long userId;
+    @ManyToOne
+    private Users users;
 
-    private Long groupId;
+    @ManyToOne
+    private Groups groups;
 
     @CreationTimestamp
     @Temporal(TemporalType.DATE)

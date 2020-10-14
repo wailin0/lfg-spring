@@ -51,7 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/api/all/**");
+        web.ignoring().antMatchers("/api/all/**", "/h2-console");
     }
 
     @Override

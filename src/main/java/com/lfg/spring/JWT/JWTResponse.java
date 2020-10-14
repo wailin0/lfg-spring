@@ -1,7 +1,5 @@
 package com.lfg.spring.JWT;
 
-import java.util.List;
-
 public class JWTResponse {
 
     private String token;

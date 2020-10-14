@@ -1,7 +1,5 @@
 package com.lfg.spring.model;
 
-import java.time.LocalDateTime;
-
 public class ChatMessage {
     private MessageType type;
     private String content;
