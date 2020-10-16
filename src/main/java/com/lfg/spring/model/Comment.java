@@ -3,7 +3,6 @@ package com.lfg.spring.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -15,19 +14,19 @@ import java.util.Date;
 public class Comment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long commentId;
 
     private String body;
 
-    @CreationTimestamp
-    @Temporal(TemporalType.DATE)
     private Date createdDate;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    @JoinColumn(name="userId", referencedColumnName="userId")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+    @JoinColumn(name="postId", referencedColumnName="postId")
     private Post post;
 
 }

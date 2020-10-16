@@ -1,6 +1,7 @@
 package com.lfg.spring.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="users")
@@ -37,6 +39,6 @@ public class User {
     @JoinColumn(name="memberId")
     private Member member;
 
-    private Date createdDate;
+    private Date createdAt;
 
 }

@@ -14,7 +14,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -43,10 +43,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS).permitAll()
+                /*.antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers("/api/auth/**").hasRole("USER")
-                .anyRequest().authenticated()
+                .anyRequest().authenticated()*/
+                .antMatchers("/**").permitAll()
                 .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+    
+        // to allow h2 console to open
+        http.headers().frameOptions().disable();
     }
 
     @Override
@@ -54,15 +58,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/api/all/**", "/h2-console");
     }
 
-    @Override
     @Bean
+    @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
+        
         return super.authenticationManagerBean();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        
+        return new BCryptPasswordEncoder(); 
     }
 
 }
