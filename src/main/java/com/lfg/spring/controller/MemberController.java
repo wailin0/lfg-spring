@@ -1,9 +1,9 @@
 package com.lfg.spring.controller;
 
 import com.lfg.spring.JWT.JWTUtil;
-import com.lfg.spring.model.Members;
-import com.lfg.spring.repository.MembersRepository;
-import com.lfg.spring.service.MembersService;
+import com.lfg.spring.model.Member;
+import com.lfg.spring.repository.MemberRepository;
+import com.lfg.spring.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,52 +13,45 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/auth")
-public class MembersController {
+public class MemberController {
 
     @Autowired
-    private MembersService membersService;
+    private MemberService memberService;
 
     @Autowired
-    private MembersRepository membersRepository;
+    private MemberRepository membersRepository;
 
     @Autowired
     private JWTUtil jwtUtil;
 
     @GetMapping("/member")
-    public List<Members> getAll(){
+    public List<Member> getAll(){
         return membersRepository.findAll();
     }
 
-
-    //to do
-    /// get member by userid
-
-
-
     @GetMapping("/group/{groupId}/members")
-    public List<Members> getMembersByGroupId(@PathVariable Long groupId){
-        return membersService.getMemberList(groupId);
+    public List<Member> getMembersByGroupId(@PathVariable Long groupId){
+        return null;
     }
 
     @PostMapping("/joinGroup/{groupId}")
     public void joinGroupController (@PathVariable Long groupId, HttpServletRequest request) {
-        String authToken = request.getHeader("Authorization");
+        /*String authToken = request.getHeader("Authorization");
         final String token = authToken.substring(7);
         String username = jwtUtil.getUsernameFromToken(token);
 
-        membersService.joinGroup(username, groupId);
+        memberService.joinGroup(username, groupId);*/
     }
 
     @DeleteMapping("/leaveGroup/{groupId}")
     public void leaveGroupController (@PathVariable Long groupId, HttpServletRequest request) {
-        String authToken = request.getHeader("Authorization");
+        /*String authToken = request.getHeader("Authorization");
         final String token = authToken.substring(7);
         String username = jwtUtil.getUsernameFromToken(token);
 
-        membersService.leaveGroup(username, groupId);
+        memberService.leaveGroup(username, groupId);*/
     }
 
-
-
-
+    // TODO: get member by userid
+    
 }

@@ -6,18 +6,21 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name="users")
 @Entity
-public class Users {
+public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long userId;
 
     @Column(unique = true)
     private String username;
@@ -25,19 +28,15 @@ public class Users {
     @Column(unique = true)
     private String email;
 
+    @JsonIgnore
     private String password;
     private boolean isEnabled;
     private String role;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name="memberId")
+    private Member member;
 
-    @OneToMany(mappedBy = "users")
-    private List<Posts> post;
-
-    @OneToOne
-    private Members members;
-
-    @CreationTimestamp
-    @Temporal(TemporalType.DATE)
     private Date createdDate;
 
 }

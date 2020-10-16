@@ -1,11 +1,10 @@
 package com.lfg.spring.service;
 
-import com.lfg.spring.model.Users;
-import com.lfg.spring.repository.UsersRepository;
+import com.lfg.spring.model.User;
+import com.lfg.spring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,18 +19,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 
     @Autowired
-    private UsersRepository usersRepo;
+    private UserRepository userRepo;
 
     @Transactional
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users user = usersRepo.findByUsername(username);
+        /*User user = userRepo.findByUsername(username);
 
         if(user == null ) throw new UsernameNotFoundException("username not found");
 
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-        return new User(user.getUsername(),user.getPassword(),user.isEnabled(),true, true, true,authorities);
+        return new User(user.getUsername(),user.getPassword(),user.isEnabled(),true, true, true,authorities);*/
+        return null;
     }
 
 

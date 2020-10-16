@@ -3,7 +3,7 @@ package com.lfg.spring.controller;
 import com.lfg.spring.JWT.JWTRequest;
 import com.lfg.spring.JWT.JWTResponse;
 import com.lfg.spring.JWT.JWTUtil;
-import com.lfg.spring.model.Users;
+import com.lfg.spring.model.User;
 import com.lfg.spring.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -50,7 +50,7 @@ public class LoginController {
         String authToken = request.getHeader("Authorization");
         final String token = authToken.substring(7);
         String username = jwtUtil.getUsernameFromToken(token);
-        Users user = (Users) userDetailsServiceImpl.loadUserByUsername(username);
+        User user = (User) userDetailsServiceImpl.loadUserByUsername(username);
         if (jwtUtil.canTokenBeRefreshed(token)) {
             String refreshedToken = jwtUtil.refreshToken(token);
             return ResponseEntity.ok(new JWTResponse(refreshedToken));

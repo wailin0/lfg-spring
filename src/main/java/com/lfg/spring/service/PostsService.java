@@ -1,12 +1,12 @@
 package com.lfg.spring.service;
 
 import com.lfg.spring.JWT.JWTUtil;
-import com.lfg.spring.model.Groups;
-import com.lfg.spring.model.Posts;
-import com.lfg.spring.model.Users;
-import com.lfg.spring.repository.GroupsRepository;
-import com.lfg.spring.repository.PostsRepository;
-import com.lfg.spring.repository.UsersRepository;
+import com.lfg.spring.model.Group;
+import com.lfg.spring.model.Post;
+import com.lfg.spring.model.User;
+import com.lfg.spring.repository.GroupRepository;
+import com.lfg.spring.repository.PostRepository;
+import com.lfg.spring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,50 +17,42 @@ public class PostsService {
 
 
     @Autowired
-    private PostsRepository postsRepository;
+    private PostRepository postRepository;
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private GroupsRepository groupsRepository;
+    private GroupRepository groupRepository;
 
     @Autowired
     private JWTUtil jwtUtil;
 
-    public List<Posts> getAllPost(){
-        return postsRepository.findAll();
+   /* public List<Post> getAllPost(){
+        return postRepository.findAll();
     }
 
-    public List<Posts> getAllPostFromAGroup(Long groupId) {
-        return postsRepository.findByGroups_Id(groupId);
+    public List<Post> getAllPostFromAGroup(Long groupId) {
+        return postRepository.findByGroup_Id(groupId);
     }
 
-    public void savePost(String username, Long groupId, Posts post) {
-        Users user = usersRepository.findByUsername(username);
-        Groups group = groupsRepository.findById(groupId).orElse(null);
-        post.setUsers(user);
-        post.setGroups(group);
-        postsRepository.save(post);
+    public void savePost(String username, Long groupId, Post post) {
+        User user = userRepository.findByUsername(username);
+        Group group = groupRepository.findById(groupId).orElse(null);
+        post.setUser(user);
+        post.setGroup(group);
+        postRepository.save(post);
     }
 
     public void deletePost(Long postId, String username) throws Exception {
-        Users user = usersRepository.findByUsername(username);
-        Posts post = postsRepository.findById(postId).orElse(null);
-        if(user.getId().equals(post.getUsers().getId())){
-            postsRepository.deleteById(postId);
+        User user = userRepository.findByUsername(username);
+        Post post = postRepository.findById(postId).orElse(null);
+        if(user.getUserId().equals(post.getUser().getUserId())){
+            postRepository.deleteById(postId);
         }
         else{
             throw new Exception("Error: that post is not yours to delete");
-        }
+        }*/
     }
 
 
-
-
-
-
-
-
-
-}

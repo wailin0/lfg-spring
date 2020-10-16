@@ -1,8 +1,8 @@
 package com.lfg.spring.controller;
 
 import com.lfg.spring.JWT.JWTUtil;
-import com.lfg.spring.model.Users;
-import com.lfg.spring.repository.UsersRepository;
+import com.lfg.spring.model.User;
+import com.lfg.spring.repository.UserRepository;
 import com.lfg.spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 public class UserController {
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository userRepository;
 
     @Autowired
     private JWTUtil jwtUtil;
@@ -26,13 +26,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/user/userInfo")
-    public Users getUserByUsername(HttpServletRequest request) {
+   /* @GetMapping("/user/userInfo")
+    public User getUserByUsername(HttpServletRequest request) {
         final String requestTokenHeader = request.getHeader("Authorization");
         String jwtToken = requestTokenHeader.substring(7);
         String username = jwtUtil.getUsernameFromToken(jwtToken);  //get legit username from token
-        return usersRepository.findByUsername(username);
-    }
+        return userRepository.findByUsername(username);
+    }*/
 
 
 }

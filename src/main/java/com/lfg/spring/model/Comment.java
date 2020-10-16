@@ -12,11 +12,11 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Comments {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long commentId;
 
     private String body;
 
@@ -25,9 +25,9 @@ public class Comments {
     private Date createdDate;
 
     @ManyToOne
-    private Users users;
+    private User user;
 
     @ManyToOne
-    private Posts posts;
+    private Post post;
 
 }

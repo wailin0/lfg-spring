@@ -1,11 +1,11 @@
 package com.lfg.spring.service;
 
-import com.lfg.spring.model.Groups;
-import com.lfg.spring.model.Members;
-import com.lfg.spring.model.Users;
-import com.lfg.spring.repository.GroupsRepository;
-import com.lfg.spring.repository.MembersRepository;
-import com.lfg.spring.repository.UsersRepository;
+import com.lfg.spring.model.Group;
+import com.lfg.spring.model.Member;
+import com.lfg.spring.model.User;
+import com.lfg.spring.repository.GroupRepository;
+import com.lfg.spring.repository.MemberRepository;
+import com.lfg.spring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,23 +13,23 @@ import org.springframework.stereotype.Service;
 public class GroupService {
 
     @Autowired
-    private GroupsRepository groupsRepository;
+    private GroupRepository groupRepository;
 
     @Autowired
-    private MembersRepository membersRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository userRepository;
 
-    public void createGroup(String username, Groups group) {
+    /*public void createGroup(String username, Group group) {
 
-        Users user = usersRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username);
 
-        groupsRepository.save(group);
-        Members members = new Members();  //make first member admin
-        members.setGroups(group);
-        members.setRole("ADMIN");
-        members.setUsers(user);
-        membersRepository.save(members);
-    }
+        groupRepository.save(group);
+        Member member = new Member();  //make first member admin
+        member.setGroup(group);
+        member.setRole("ADMIN");
+        member.setUser(user);
+        memberRepository.save(member);
+    }*/
 }

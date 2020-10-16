@@ -13,11 +13,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Groups {
+public class Group {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long groupId;
 
     @Column(unique = true)
     private String name;
@@ -26,16 +26,14 @@ public class Groups {
     private String description;
     private String type;
 
-    @OneToMany(mappedBy = "groups")
-    private List<Posts> posts;
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    private List<Post> post;
 
-    @OneToMany(mappedBy = "groups")
-    private List<Members> members;
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    private List<Member> member;
 
     private boolean disabled;
 
-    @CreationTimestamp
-    @Temporal(TemporalType.DATE)
     private Date createdDate;
 
 }

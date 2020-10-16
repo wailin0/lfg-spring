@@ -12,26 +12,23 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Members {
+public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long memberId;
 
-    @OneToOne(mappedBy = "members")
-    private Users users;
+    @OneToOne(mappedBy="member", fetch = FetchType.LAZY)
+    private User user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "groups_id")
-    private Groups groups;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "groupId", referencedColumnName="groupId")
+    private Group group;
 
     private String role;
 
     private boolean disabled;
 
-    @CreationTimestamp
-    @Temporal(TemporalType.DATE)
     private Date joinedDate;
-
 
 }
