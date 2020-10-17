@@ -5,6 +5,7 @@ import com.lfg.spring.model.Members;
 import com.lfg.spring.repository.MembersRepository;
 import com.lfg.spring.service.MembersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class MembersController {
 
     @Autowired
@@ -30,26 +31,26 @@ public class MembersController {
     }
 
 
-    //to do
-    /// get member by userid
-
-
-
-    @GetMapping("/group/{groupId}/members")
+    @GetMapping("/group/{groupId}/member")
     public List<Members> getMembersByGroupId(@PathVariable Long groupId){
         return membersService.getMemberList(groupId);
     }
 
-    @PostMapping("/joinGroup/{groupId}")
-    public void joinGroupController (@PathVariable Long groupId, HttpServletRequest request) {
+    @PostMapping("/group/{groupId}/member")
+    public ResponseEntity<String> joinGroupController (@PathVariable Long groupId, HttpServletRequest request) throws Exception {
         String authToken = request.getHeader("Authorization");
         final String token = authToken.substring(7);
         String username = jwtUtil.getUsernameFromToken(token);
 
+
+        //to do
+        // check if user is already joined to a specific group
+
         membersService.joinGroup(username, groupId);
+        return ResponseEntity.ok("Successfully joined");
     }
 
-    @DeleteMapping("/leaveGroup/{groupId}")
+    @DeleteMapping("/group/{groupId}/member")
     public void leaveGroupController (@PathVariable Long groupId, HttpServletRequest request) {
         String authToken = request.getHeader("Authorization");
         final String token = authToken.substring(7);

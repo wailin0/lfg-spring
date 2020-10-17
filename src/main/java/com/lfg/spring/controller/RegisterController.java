@@ -11,7 +11,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/all")
+@RequestMapping("/api")
 public class RegisterController {
 
     @Autowired
@@ -21,7 +21,7 @@ public class RegisterController {
     private UserService userService;
 
 
-
+    //for testing
     @GetMapping("/register")
     public List<Users> re() {
         return usersRepository.findAll();
@@ -29,9 +29,24 @@ public class RegisterController {
 
 
     // register user
-    @PostMapping("/register")
+    @PostMapping("/user")
     public ResponseEntity<?> register(@RequestBody Users user){
-        System.out.println(user.getUsername());
+        if(user.getUsername() == null){
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: Username is required");
+        }
+        else if(user.getEmail() == null){
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: Email is required");
+        }
+        else if(user.getPassword() == null){
+            return ResponseEntity
+                    .badRequest()
+                    .body("Error: Password is required");
+        }
+
         if (usersRepository.existsByUsername(user.getUsername())) {
             return ResponseEntity
                     .badRequest()
@@ -43,6 +58,7 @@ public class RegisterController {
                     .badRequest()
                     .body("Error: Account with that email already exist");
         }
+
         userService.registerUser(user);
         return ResponseEntity.ok("User Registration successful");
     }

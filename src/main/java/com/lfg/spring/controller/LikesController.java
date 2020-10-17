@@ -9,7 +9,7 @@ import java.util.Set;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class LikesController {
 
     @Autowired
@@ -26,7 +26,7 @@ public class LikesController {
         return null;
     }
 
-    @PostMapping("/{vote}")
+    @PostMapping("/post/{postId}/like")
     public void saveUserLikeByPostId (@PathVariable String vote, @RequestBody Likes like) {
         if(vote.equals("like")) {
             likesRepository.save(like);
@@ -36,10 +36,10 @@ public class LikesController {
         }
     }
 
-    @PutMapping("/like/post/{postId}/user/{userId}")
+    @PutMapping("/like")
     public void changeVote(@PathVariable Long postId,
-                           @PathVariable Long userId,
                            @RequestBody Likes like){
+        Long userId = null;
         Likes voteToChange = likesRepository.findByPostIdAndUserId(postId, userId);
         voteToChange.setLiked(like.isLiked());
         likesRepository.save(voteToChange);

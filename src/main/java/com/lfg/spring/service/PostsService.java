@@ -28,7 +28,7 @@ public class PostsService {
     @Autowired
     private JWTUtil jwtUtil;
 
-    public List<Posts> getAllPost(){
+    public List<Posts> getAllPost() {
         return postsRepository.findAll();
     }
 
@@ -36,31 +36,27 @@ public class PostsService {
         return postsRepository.findByGroups_Id(groupId);
     }
 
-    public void savePost(String username, Long groupId, Posts post) {
+    public void savePost(String username, Long groupId, Posts post) throws Exception {
         Users user = usersRepository.findByUsername(username);
         Groups group = groupsRepository.findById(groupId).orElse(null);
+        if (group == null) {
+            throw new Exception("that group doesnt exist");
+        }
         post.setUsers(user);
         post.setGroups(group);
         postsRepository.save(post);
     }
 
     public void deletePost(Long postId, String username) throws Exception {
-        Users user = usersRepository.findByUsername(username);
         Posts post = postsRepository.findById(postId).orElse(null);
-        if(user.getId().equals(post.getUsers().getId())){
-            postsRepository.deleteById(postId);
-        }
-        else{
-            throw new Exception("Error: that post is not yours to delete");
+        if (post != null) {
+            if (post.getUsers().getUsername().equals(username)) {
+                postsRepository.deleteById(postId);
+            } else {
+                throw new Exception("Error: that post is not yours to delete");
+            }
         }
     }
-
-
-
-
-
-
-
 
 
 }

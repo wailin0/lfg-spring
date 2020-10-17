@@ -1,5 +1,6 @@
 package com.lfg.spring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,10 +27,12 @@ public class Groups {
     private String description;
     private String type;
 
-    @OneToMany(mappedBy = "groups")
+    @JsonIgnore
+    @OneToMany(mappedBy = "groups", cascade = CascadeType.ALL)
     private List<Posts> posts;
 
-    @OneToMany(mappedBy = "groups")
+    @JsonIgnore
+    @OneToMany(mappedBy = "groups", cascade = CascadeType.ALL)
     private List<Members> members;
 
     private boolean disabled;

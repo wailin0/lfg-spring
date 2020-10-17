@@ -1,5 +1,7 @@
 package com.lfg.spring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,22 +21,25 @@ public class Users {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(unique = true)
+    @NotNull
+    @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String password;
     private boolean isEnabled;
     private String role;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "users")
     private List<Posts> post;
 
-    @OneToOne
-    private Members members;
+    @JsonIgnore
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL)
+    private List<Members> members;
 
     @CreationTimestamp
     @Temporal(TemporalType.DATE)

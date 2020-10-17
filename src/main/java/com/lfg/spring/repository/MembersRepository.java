@@ -13,4 +13,6 @@ public interface MembersRepository extends JpaRepository<Members, Long> {
     List<Members> findByGroups_Id(Long groupId);
 
     void deleteByGroups_IdAndUsers_Id(Long groupId, Long userId);
+
+    Members findByUsersUsername(String username);
 }

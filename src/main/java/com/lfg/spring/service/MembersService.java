@@ -43,6 +43,7 @@ public class MembersService {
 
     public void leaveGroup(String username, Long groupId) {
         Users user = usersRepository.findByUsername(username);
+        
         membersRepository.deleteByGroups_IdAndUsers_Id(groupId, user.getId());
     }
 

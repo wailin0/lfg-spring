@@ -44,14 +44,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/api/auth/**").hasRole("USER")
+                .antMatchers(HttpMethod.GET).permitAll()
+                .antMatchers(HttpMethod.POST,"/api/user","/api/login").permitAll()
+                .antMatchers("/api/**").hasRole("USER")
                 .anyRequest().authenticated()
                 .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers("/api/all/**", "/h2-console");
+        web.ignoring().antMatchers(HttpMethod.GET, "/api/register")
+                .antMatchers(HttpMethod.POST, "/api/login");
     }
 
     @Override

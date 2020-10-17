@@ -12,7 +12,7 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class GroupsController {
 
     @Autowired
@@ -24,6 +24,7 @@ public class GroupsController {
     @Autowired
     private JWTUtil jwtUtil;
 
+    //for testing
     @GetMapping("/group")
     public List<Groups> getAllGroup() {
         return groupsRepository.findAll();
@@ -35,7 +36,7 @@ public class GroupsController {
     }
 
 
-    @PostMapping("/group/createGroup")
+    @PostMapping("/group")
     public void createGroup(@RequestBody Groups group, HttpServletRequest request) {
         String authToken = request.getHeader("Authorization");
         final String token = authToken.substring(7);

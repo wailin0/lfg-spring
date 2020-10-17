@@ -18,14 +18,16 @@ public class Posts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
+    @Column(nullable = false)
     private String body;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "users_id")
+    @ManyToOne()
+    @JoinColumn(name = "username")
     private Users users;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne()
     @JoinColumn(name = "groups_id")
     private Groups groups;
 

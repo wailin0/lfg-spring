@@ -18,11 +18,12 @@ public class Members {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "members")
+
+    @ManyToOne()
     private Users users;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "groups_id")
+
+    @ManyToOne()
     private Groups groups;
 
     private String role;

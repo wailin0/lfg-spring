@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/all")
+@RequestMapping("/api")
 public class LoginController {
 
     @Autowired
@@ -31,11 +31,6 @@ public class LoginController {
 
     @Autowired
     private JWTUtil jwtUtil;
-
-    @GetMapping("/test")
-    public ResponseEntity<?> getTest(){
-        return ResponseEntity.ok("ffuuuuuufufuffu");
-    }
 
     @PostMapping("/login")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JWTRequest jwtRequest)

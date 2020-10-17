@@ -1,7 +1,7 @@
 package com.lfg.spring;
 
-import com.lfg.spring.model.Posts;
 import com.lfg.spring.model.Users;
+import com.lfg.spring.repository.GroupsRepository;
 import com.lfg.spring.repository.PostsRepository;
 import com.lfg.spring.repository.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +22,11 @@ public class Application implements CommandLineRunner {
     @Autowired
     private UsersRepository usersRepository;
 
+    @Autowired
+    private GroupsRepository groupsRepository;
+
     @Override
     public void run(String... args) throws Exception {
-        Posts post = new Posts();
-        post.setTitle("Title");
-        post.setBody("body");
-        postsRepository.save(post);
-
         Users user = new Users();
         user.setUsername("user");
         user.setRole("USER");
