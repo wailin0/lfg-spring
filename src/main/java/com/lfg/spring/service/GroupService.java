@@ -21,7 +21,7 @@ public class GroupService {
     @Autowired
     private UserRepository userRepository;
 
-    /*public void createGroup(String username, Group group) {
+    /*public Group create(GroupDto groupDto) {
 
         User user = userRepository.findByUsername(username);
 
@@ -32,4 +32,9 @@ public class GroupService {
         member.setUser(user);
         memberRepository.save(member);
     }*/
+
+    public Group getReference(Long groupId){
+
+        return groupRepository.getOne(groupId);
+    }
 }

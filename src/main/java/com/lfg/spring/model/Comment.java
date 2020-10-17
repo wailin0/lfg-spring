@@ -13,6 +13,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import java.util.Date;
 
 @Setter
@@ -31,10 +34,12 @@ public class Comment {
 
     private Date createdAt;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="userId")
     private User user;
 
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="postId")
     private Post post;

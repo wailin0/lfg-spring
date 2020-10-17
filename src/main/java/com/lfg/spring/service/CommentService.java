@@ -20,7 +20,7 @@ public class CommentService {
     private UserService userService;
 
     @Autowired
-    private PostsService postsService;
+    private PostService postService;
 
     public Comment create(CommentDto commentDto){
 
@@ -28,17 +28,17 @@ public class CommentService {
         comment.setBody(commentDto.getBody());
         comment.setCreatedAt(new Date());
         comment.setUser(userService.getReference(commentDto.getUserId()));
-        comment.setPost(postsService.getReference(commentDto.getPostId()));
+        comment.setPost(postService.getReference(commentDto.getPostId()));
         
         return commentRepository.save(comment);
     }
 
-    public List<Comment> findByPostId(Long postId){
+    public List<Comment> getByPostId(Long postId){
         
         return commentRepository.findAllByPostId(postId);
     }
 
-    public List<Comment> findByUserId(Long userId){
+    public List<Comment> getByUserId(Long userId){
 
         return commentRepository.findAllByUserId(userId);
     }

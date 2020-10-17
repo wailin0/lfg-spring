@@ -24,5 +24,9 @@ public class UserService {
 
         return userRepository.getOne(userId);
     }
+
+	public User getCurrentLoggedInUser() {
+		return null;
+	}
     
 }

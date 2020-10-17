@@ -2,8 +2,11 @@ package com.lfg.spring.controller;
 
 import com.lfg.spring.JWT.JWTUtil;
 import com.lfg.spring.model.Post;
-import com.lfg.spring.service.PostsService;
+import com.lfg.spring.model.DTO.PostDto;
+import com.lfg.spring.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,36 +17,34 @@ import java.util.List;
 public class PostController {
 
     @Autowired
-    private PostsService postsService;
+    private PostService postService;
 
     @Autowired
     private JWTUtil jwtUtil;
 
-    @GetMapping("/api/all/post")
-    public List<Post> getAllPost(){
-        return null;
+    @GetMapping("/api/posts")
+    public ResponseEntity<List<Post>> getAllPost(){
+
+        return new ResponseEntity<>(postService.getAll(), HttpStatus.OK); 
     }
 
-    @GetMapping("/api/all/post/{groupId}")
-    public List<Post> getPostsByGroupId(@PathVariable Long groupId) {
-        return null;
+    @GetMapping("/api/posts/{groupId}")
+    public ResponseEntity<List<Post>> getPostsByGroupId(@PathVariable Long groupId) {
+
+        return new ResponseEntity<>(postService.getByGroupId(groupId), HttpStatus.OK); 
     }
 
-    @PostMapping("/api/auth/post/{groupId}")
-    public void savePostController(@PathVariable Long groupId, @RequestBody Post post, HttpServletRequest request){
-        /*String authToken = request.getHeader("Authorization");
-        final String token = authToken.substring(7);
-        String username = jwtUtil.getUsernameFromToken(token);
+    @PostMapping("/api/auth/posts/{groupId}")
+    public ResponseEntity<Post> savePostController(@RequestBody PostDto postDto){
 
-        postsService.savePost(username, groupId, post);*/
+        return new ResponseEntity<>(postService.create(postDto), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/api/auth/post/{postId}")
-    public void deletePostController(@PathVariable Long postId, HttpServletRequest request) throws Exception {
-        /*String authToken = request.getHeader("Authorization");
-        final String token = authToken.substring(7);
-        String username = jwtUtil.getUsernameFromToken(token);
+    @DeleteMapping("/api/auth/posts/{postId}")
+    public ResponseEntity<?> deletePostController(@PathVariable Long postId) {
 
-        postsService.deletePost(postId, username);*/
+        postService.delete(postId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
