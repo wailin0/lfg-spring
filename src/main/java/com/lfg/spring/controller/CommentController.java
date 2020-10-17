@@ -1,6 +1,7 @@
 package com.lfg.spring.controller;
 
 import com.lfg.spring.model.Comment;
+import com.lfg.spring.model.DTO.CommentDto;
 import com.lfg.spring.service.CommentService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,13 +25,10 @@ public class CommentController {
         return new ResponseEntity<>(commentService.findByPostId(postId), HttpStatus.OK); 
     }
 
-    @PostMapping("/comment/{postId}")
-    public ResponseEntity<Comment> saveComment(@RequestBody Comment comment){
+    @PostMapping("/comment")
+    public ResponseEntity<Comment> saveComment(@RequestBody CommentDto commentDto){
         
-        return new ResponseEntity<>(commentService.create(comment), HttpStatus.CREATED);
+        return new ResponseEntity<>(commentService.create(commentDto), HttpStatus.CREATED);
     }
-
-
-
 
 }

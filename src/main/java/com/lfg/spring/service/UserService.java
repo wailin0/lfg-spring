@@ -19,4 +19,10 @@ public class UserService {
         user.setEnabled(true);  // for testing
         userRepository.save(user);
     }
+
+    public User getReference(Long userId){
+
+        return userRepository.getOne(userId);
+    }
+    
 }

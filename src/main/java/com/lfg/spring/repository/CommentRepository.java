@@ -13,7 +13,10 @@ import java.util.List;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    @Query("SELECT c FROM Comment c WHERE :postId = c.post.id")
+    @Query("SELECT c FROM Comment c JOIN FETCH c.user WHERE c.post.id = :postId")
     public List<Comment> findAllByPostId(Long postId);
+
+    @Query("SELECT c FROM Comment c JOIN FETCH c.post WHERE c.user.id = :userId")
+    public List<Comment> findAllByUserId(Long userId);
 
 }

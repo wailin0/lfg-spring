@@ -53,6 +53,11 @@ public class PostsService {
         else{
             throw new Exception("Error: that post is not yours to delete");
         }*/
-    }
+    
 
+    public Post getReference(Long postId){
+
+        return postRepository.getOne(postId);
+    }
+}
 
