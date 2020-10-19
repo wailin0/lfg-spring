@@ -37,4 +37,5 @@ public class GroupService {
 
         return groupRepository.getOne(groupId);
     }
+
 }

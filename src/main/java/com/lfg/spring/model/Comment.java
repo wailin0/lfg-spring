@@ -23,7 +23,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Comment {
 
     @Id
@@ -34,12 +33,10 @@ public class Comment {
 
     private Date createdAt;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="userId")
     private User user;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="postId")
     private Post post;

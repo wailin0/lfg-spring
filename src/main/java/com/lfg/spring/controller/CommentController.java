@@ -20,13 +20,13 @@ public class CommentController {
     private CommentService commentService;
 
     @GetMapping("/comments/{postId}")
-    public ResponseEntity<List<Comment>> getCommentsByPostId(@PathVariable Long postId) {
+    public ResponseEntity<List<Comment>> getByPostId(@PathVariable Long postId) {
         
         return new ResponseEntity<>(commentService.getByPostId(postId), HttpStatus.OK); 
     }
 
     @PostMapping("/comments")
-    public ResponseEntity<Comment> saveComment(@RequestBody CommentDto commentDto){
+    public ResponseEntity<Comment> create(@RequestBody CommentDto commentDto){
         
         return new ResponseEntity<>(commentService.create(commentDto), HttpStatus.CREATED);
     }

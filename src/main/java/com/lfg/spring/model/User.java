@@ -39,11 +39,6 @@ public class User {
     private boolean isEnabled;
     private String role;
 
-    @MapsId
-    @OneToOne
-    @JoinColumn(name="userId")
-    private Member member;
-
     private Date createdAt;
 
 }

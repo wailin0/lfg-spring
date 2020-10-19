@@ -58,9 +58,8 @@ public class PostService {
 
         User user = userService.getCurrentLoggedInUser();
 
-        if(!postRepository.isUserOwensPost(3L, postId))
+        if(!postRepository.isUserOwensPost(1L, postId))
             //TODO: throw custom message (post-specific)
-            //throw new ("Error: that post is not yours to delete");    
             return;
 
         postRepository.deleteById(postId);

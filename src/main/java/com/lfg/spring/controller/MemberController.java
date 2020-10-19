@@ -2,9 +2,12 @@ package com.lfg.spring.controller;
 
 import com.lfg.spring.JWT.JWTUtil;
 import com.lfg.spring.model.Member;
+import com.lfg.spring.model.DTO.MemberDto;
 import com.lfg.spring.repository.MemberRepository;
 import com.lfg.spring.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,40 +21,30 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @Autowired
-    private MemberRepository membersRepository;
-
-    @Autowired
-    private JWTUtil jwtUtil;
-
-    @GetMapping("/member")
-    public List<Member> getAll(){
-        return membersRepository.findAll();
-    }
-
-    @GetMapping("/group/{groupId}/members")
-    public List<Member> getMembersByGroupId(@PathVariable Long groupId){
-        return null;
-    }
-
-    @PostMapping("/joinGroup/{groupId}")
-    public void joinGroupController (@PathVariable Long groupId, HttpServletRequest request) {
-        /*String authToken = request.getHeader("Authorization");
-        final String token = authToken.substring(7);
-        String username = jwtUtil.getUsernameFromToken(token);
-
-        memberService.joinGroup(username, groupId);*/
-    }
-
-    @DeleteMapping("/leaveGroup/{groupId}")
-    public void leaveGroupController (@PathVariable Long groupId, HttpServletRequest request) {
-        /*String authToken = request.getHeader("Authorization");
-        final String token = authToken.substring(7);
-        String username = jwtUtil.getUsernameFromToken(token);
-
-        memberService.leaveGroup(username, groupId);*/
-    }
-
-    // TODO: get member by userid
     
+    @GetMapping("/members")
+    public List<Member> getAll(){
+        return memberService.getAll();
+    }
+
+    @GetMapping("/members/{groupId}")
+    public ResponseEntity<List<Member>> getByGroupId(@PathVariable Long groupId){
+
+        return new ResponseEntity<>(memberService.getByGroupId(groupId), HttpStatus.OK);
+    }
+
+    @PostMapping("/members/{groupId}")
+    public ResponseEntity<Member> create(@PathVariable Long groupId){
+
+        return new ResponseEntity<>(memberService.create(groupId), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/posts/{groupId}")
+    public ResponseEntity<?> delete(@PathVariable Long groupId) {
+
+        memberService.delete(groupId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }

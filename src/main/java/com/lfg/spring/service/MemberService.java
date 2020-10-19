@@ -1,16 +1,18 @@
 package com.lfg.spring.service;
 
+import java.util.Date;
+import java.util.List;
+
 import com.lfg.spring.JWT.JWTUtil;
-import com.lfg.spring.model.Group;
 import com.lfg.spring.model.Member;
 import com.lfg.spring.model.User;
+import com.lfg.spring.model.DTO.MemberDto;
+import com.lfg.spring.model.enums.MemberRole;
 import com.lfg.spring.repository.GroupRepository;
 import com.lfg.spring.repository.MemberRepository;
 import com.lfg.spring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class MemberService {
@@ -19,32 +21,47 @@ public class MemberService {
     private MemberRepository memberRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    private JWTUtil jwtUtil;
+    private GroupService groupService;
 
-    @Autowired
-    private GroupRepository groupRepository;
 
-    /*public List<Member> getMemberList(Long groupId) {
-        return memberRepository.findByGroup_Id(groupId);
+    public List<Member> getByGroupId(Long groupId) {
+
+        return memberRepository.findAllByGroupId(groupId);
     }
 
-    public void joinGroup(String username, Long groupId){
-        User user = userRepository.findByUsername(username);
-        Group group = groupRepository.findById(groupId).orElse(null);
+    public List<Member> getAll(){
+
+        return memberRepository.findAll();
+    }
+
+    // create membership and join a group
+    public Member create(Long groupId){
         Member member = new Member();
-        member.setGroup(group);
-        member.setUser(user);
-        member.setRole("MEMBER");
-        memberRepository.save(member);
-    }
+        User user = userService.getCurrentLoggedInUser();
 
-    public void leaveGroup(String username, Long groupId) {
-        User user = userRepository.findByUsername(username);
-        memberRepository.deleteByGroup_IdAndUser_Id(groupId, user.getUserId());
+        if(memberRepository.isUserInGroup(user.getUserId(), groupId));
+            // throw an error
+            
+        member.setGroup(groupService.getReference(groupId));
+        member.setJoinedAt(new Date());
+        member.setRole(MemberRole.MEMBER_ROLE.name());
+        member.setDisabled(false);
+        member.setUser(user);
+
+        return memberRepository.save(member);
     }
-*/
+    
+    
+    public void delete(Long groupId) {
+        User user = userService.getCurrentLoggedInUser();
+
+        if(!memberRepository.isUserInGroup(user.getUserId(), groupId));
+            // throw an error
+        
+        memberRepository.deleteByGroupAndUserId(user.getUserId(), groupId);
+    }
     
 }

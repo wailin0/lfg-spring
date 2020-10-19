@@ -14,37 +14,36 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
+@RequestMapping("/api")
 public class PostController {
 
     @Autowired
     private PostService postService;
 
-    @Autowired
-    private JWTUtil jwtUtil;
-
-    @GetMapping("/api/posts")
-    public ResponseEntity<List<Post>> getAllPost(){
+    @GetMapping("/posts")
+    public ResponseEntity<List<Post>> getAll(){
 
         return new ResponseEntity<>(postService.getAll(), HttpStatus.OK); 
     }
 
-    @GetMapping("/api/posts/{groupId}")
-    public ResponseEntity<List<Post>> getPostsByGroupId(@PathVariable Long groupId) {
+    @GetMapping("/posts/{groupId}")
+    public ResponseEntity<List<Post>> getByGroupId(@PathVariable Long groupId) {
 
         return new ResponseEntity<>(postService.getByGroupId(groupId), HttpStatus.OK); 
     }
 
-    @PostMapping("/api/auth/posts/{groupId}")
-    public ResponseEntity<Post> savePostController(@RequestBody PostDto postDto){
+    @PostMapping("/posts")
+    public ResponseEntity<Post> create(@RequestBody PostDto postDto){
 
         return new ResponseEntity<>(postService.create(postDto), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/api/auth/posts/{postId}")
-    public ResponseEntity<?> deletePostController(@PathVariable Long postId) {
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<?> delete(@PathVariable Long postId) {
 
         postService.delete(postId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }
