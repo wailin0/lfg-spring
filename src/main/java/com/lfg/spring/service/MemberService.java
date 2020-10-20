@@ -22,7 +22,7 @@ public class MemberService {
     private MemberRepository memberRepository;
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
     @Autowired
     private GroupService groupService;
@@ -41,10 +41,10 @@ public class MemberService {
     // create membership and join a group
     public Member create(Long groupId){
         Member member = new Member();
-        User user = userService.getCurrentLoggedInUser();
+        User user = authService.getCurrentLoggedInUser();
 
         if(memberRepository.isUserInGroup(user.getUserId(), groupId));
-            // throw an error
+            // TODO: throw an error
             
         member.setGroup(groupService.getReference(groupId));
         member.setJoinedAt(new Date());
@@ -56,7 +56,7 @@ public class MemberService {
     }
 
     public Member createAdminIn(Group group){
-        User user = userService.getCurrentLoggedInUser();
+        User user = authService.getCurrentLoggedInUser();
 
         Member member = new Member();
         member.setGroup(group);
@@ -70,10 +70,10 @@ public class MemberService {
     
     
     public void delete(Long groupId) {
-        User user = userService.getCurrentLoggedInUser();
+        User user = authService.getCurrentLoggedInUser();
 
         if(!memberRepository.isUserInGroup(user.getUserId(), groupId));
-            // throw an error
+            // TODO: throw an error
         
         memberRepository.deleteByGroupAndUserId(user.getUserId(), groupId);
     }

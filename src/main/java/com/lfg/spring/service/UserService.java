@@ -19,22 +19,13 @@ public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    // @Autowired
-    // private BCryptPasswordEncoder encoder;
-
-    public void registerUser(User user) {
-        user.setRole("USER");
-        user.setEnabled(true); // for testing
-        userRepository.save(user);
-    }
-
     public User getReference(Long userId) {
 
         return userRepository.getOne(userId);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> userOptional = userRepository.findByUsername(username);
 
         if(userOptional.isPresent())
@@ -43,5 +34,10 @@ public class UserService implements UserDetailsService {
         log.error("User not found with username {}", username);
         throw new UsernameNotFoundException(username);
     }
-    
+
+    public User save(User user){
+
+        return userRepository.save(user);
+    }
+        
 }

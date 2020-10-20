@@ -22,6 +22,9 @@ public class PostService {
     private PostRepository postRepository;
 
     @Autowired
+    private AuthService authService;
+
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -56,7 +59,7 @@ public class PostService {
 
     public void delete(Long postId){
 
-        User user = userService.getCurrentLoggedInUser();
+        User user = authService.getCurrentLoggedInUser();
 
         if(!postRepository.isUserOwensPost(1L, postId))
             //TODO: throw custom message (post-specific)

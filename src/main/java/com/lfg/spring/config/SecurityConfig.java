@@ -2,7 +2,8 @@ package com.lfg.spring.config;
 
 import com.lfg.spring.JWT.JWTAuthEntryPoint;
 import com.lfg.spring.JWT.JWTFilter;
-import com.lfg.spring.service.UserDetailsServiceImpl;
+import com.lfg.spring.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsServiceImpl;
+    private UserService userService;
 
     @Autowired
     private JWTFilter jwtFilter;
@@ -34,7 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsServiceImpl);
+        
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
     @Override

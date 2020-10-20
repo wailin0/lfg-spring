@@ -15,7 +15,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     @Query("SELECT m FROM Member m WHERE m.group.id = :groupId")
     public List<Member> findAllByGroupId(Long groupId);
 
-    @Query("SELECT m FROM Member m WHERE m.user.id = :groupId")
+    @Query("SELECT m FROM Member m WHERE m.user.id = :userId")
     public List<Member> findAllByUserId(Long userId);
 
     @Query("SELECT count(m)>0 FROM Member m WHERE m.user.id = :userId AND m.id = :groupId")

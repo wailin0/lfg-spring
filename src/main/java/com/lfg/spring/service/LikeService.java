@@ -20,7 +20,7 @@ public class LikeService {
     private PostService postService;
 
     @Autowired
-    private UserService userService;
+    private AuthService authService;
 
     public List<Like> getByPostId(Long postId){
 
@@ -33,7 +33,7 @@ public class LikeService {
     }
 
 	public void like(LikeDto likeDto) {
-        User user = userService.getCurrentLoggedInUser();
+        User user = authService.getCurrentLoggedInUser();
 
         if(likeRepository.isPostLikedByUser(user.getUserId(), likeDto.getPostId()))
             update(likeDto.getPostId(), user.getUserId(), likeDto.isLiked());
@@ -42,7 +42,7 @@ public class LikeService {
     }
 
     public void delete(LikeDto likeDto) {
-        User user = userService.getCurrentLoggedInUser();
+        User user = authService.getCurrentLoggedInUser();
 
         likeRepository.deleteByUserAndPostId(user.getUserId(), likeDto.getPostId());
     }

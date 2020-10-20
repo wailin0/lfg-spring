@@ -3,8 +3,11 @@ package com.lfg.spring.controller;
 import com.lfg.spring.JWT.JWTUtil;
 import com.lfg.spring.model.User;
 import com.lfg.spring.repository.UserRepository;
+import com.lfg.spring.service.AuthService;
 import com.lfg.spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,21 +21,13 @@ import javax.servlet.http.HttpServletRequest;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private AuthService authService;
 
-    @Autowired
-    private JWTUtil jwtUtil;
-
-    @Autowired
-    private UserService userService;
-
-   /* @GetMapping("/user/userInfo")
-    public User getUserByUsername(HttpServletRequest request) {
-        final String requestTokenHeader = request.getHeader("Authorization");
-        String jwtToken = requestTokenHeader.substring(7);
-        String username = jwtUtil.getUsernameFromToken(jwtToken);  //get legit username from token
-        return userRepository.findByUsername(username);
-    }*/
+   @GetMapping("/user/info")
+    public ResponseEntity<User> getUserByUsername(HttpServletRequest request) {
+        
+        return new ResponseEntity<>(authService.getCurrentLoggedInUser(), HttpStatus.OK);
+    }
 
 
 }
