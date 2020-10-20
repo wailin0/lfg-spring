@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.lfg.spring.JWT.JWTUtil;
+import com.lfg.spring.model.Group;
 import com.lfg.spring.model.Member;
 import com.lfg.spring.model.User;
 import com.lfg.spring.model.DTO.MemberDto;
@@ -52,6 +53,19 @@ public class MemberService {
         member.setUser(user);
 
         return memberRepository.save(member);
+    }
+
+    public Member createAdminIn(Group group){
+        User user = userService.getCurrentLoggedInUser();
+
+        Member member = new Member();
+        member.setGroup(group);
+        member.setJoinedAt(new Date());
+        member.setRole(MemberRole.ADMIN_ROLE.name());
+        member.setDisabled(false);
+        member.setUser(user);
+
+        return member;
     }
     
     

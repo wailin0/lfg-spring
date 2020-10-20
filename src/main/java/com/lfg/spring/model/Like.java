@@ -33,12 +33,10 @@ public class Like {
 
     private boolean liked;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
     @JoinColumn(name="userId", referencedColumnName="userId")
     private User user;
 
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
     @JoinColumn(name="postId", referencedColumnName="postId")
     private Post post;

@@ -1,10 +1,16 @@
 package com.lfg.spring.controller;
 
 import com.lfg.spring.model.Like;
+import com.lfg.spring.model.DTO.LikeDto;
 import com.lfg.spring.repository.LikeRepository;
+import com.lfg.spring.service.LikeService;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @CrossOrigin
@@ -13,63 +19,34 @@ import java.util.Set;
 public class LikeController {
 
     @Autowired
-    private LikeRepository likeRepository;
+    private LikeService likeService;
 
-    @GetMapping("/post/{postId}/{vote}")
-    public Set<Like> getLikesByPostId (@PathVariable Long postId, @PathVariable String vote) {
-        /*if(vote.equals("like")) {
-            return likeRepository.findByPostPostIdAndLiked(postId, true);
-        }
-        else if(vote.equals("dislike")){
-            return likeRepository.findByPostPostIdAndLiked(postId, false);
-        }*/
-        return null;
+    @GetMapping("/likes/{postId}")
+    public ResponseEntity<List<Like>> getByPostId(@PathVariable Long postId) {
+        
+        return new ResponseEntity<>(likeService.getByPostId(postId), HttpStatus.OK);
     }
 
-    @PostMapping("/{vote}")
-    public void saveUserLikeByPostId (@PathVariable String vote, @RequestBody Like like) {
-        /*if(vote.equals("like")) {
-            likeRepository.save(like);
-        }
-        else if(vote.equals("dislike")){
-            likeRepository.save(like);
-        }*/
+    @GetMapping("/likes/{userId}")
+    public ResponseEntity<List<Like>> getByUserId(@PathVariable Long userId) {
+        
+        return new ResponseEntity<>(likeService.getByUserId(userId), HttpStatus.OK);
     }
 
-    @PutMapping("/like/post/{postId}/user/{userId}")
-    public void changeVote(@PathVariable Long postId,
-                           @PathVariable Long userId,
-                           @RequestBody Like like){
-        /*Like voteToChange = likeRepository.findByPostIdAndUserId(postId, userId);
-        voteToChange.setLiked(like.isLiked());
-        likeRepository.save(voteToChange);*/
+    @PostMapping("/likes")
+    public ResponseEntity<Like> like(@RequestBody LikeDto likeDto) {
+        
+        likeService.like(likeDto);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/{vote}/post/{postId}/user/{userId}")
-    public Like getUserLikeByPostIdAndUserId(@PathVariable String vote, @PathVariable Long postId, @PathVariable Long userId){
-        /*if(vote.equals("like")) {
-            return likeRepository.findByPostIdAndUserIdAndLiked(postId, userId, true);
-        }
-        else if(vote.equals("dislike")){
-            return likeRepository.findByPostIdAndUserIdAndLiked(postId, userId, false);
-        }*/
-        return null;
+    @DeleteMapping("/likes")
+    public ResponseEntity<Like> delete(@RequestBody LikeDto likeDto) {
+        
+        likeService.delete(likeDto);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
-    @DeleteMapping("/{remove}/post/{postId}/user/{userId}")
-    public void deleteUserLikeByPostIdAndUserId(@PathVariable String remove,
-                                                @PathVariable Long postId,
-                                                @PathVariable Long userId){
-        // TODO: replace with authorized userID
-        /*
-        if(remove.equals("like")) {
-            likeRepository.deleteByPostIdAndUserIdAndLiked(postId, userId, true);
-        }
-        else if(remove.equals("dislike")){
-            likeRepository.deleteByPostIdAndUserIdAndLiked(postId, userId, false);
-        }*/
-    }
-
 
 }

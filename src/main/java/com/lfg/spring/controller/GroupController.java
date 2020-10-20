@@ -2,9 +2,12 @@ package com.lfg.spring.controller;
 
 import com.lfg.spring.JWT.JWTUtil;
 import com.lfg.spring.model.Group;
+import com.lfg.spring.model.DTO.GroupDto;
 import com.lfg.spring.repository.GroupRepository;
 import com.lfg.spring.service.GroupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,26 +21,22 @@ public class GroupController {
     @Autowired
     private GroupService groupService;
 
-    @Autowired
-    private GroupRepository groupRepository;
+    @GetMapping("/groups")
+    public ResponseEntity<List<Group>> getAll() {
 
-    @Autowired
-    private JWTUtil jwtUtil;
+        return new ResponseEntity<>(groupService.getAll(), HttpStatus.OK);
+    }
 
-    @GetMapping("/group")
-    public List<Group> getAllGroup() {
-        return groupRepository.findAll();
+    @PostMapping("/groups")
+    public ResponseEntity<Group> create(GroupDto groupDto){
+
+        return new ResponseEntity<>(groupService.create(groupDto), HttpStatus.OK);
     }
 
     @GetMapping("/group/{topic}")
-    public List<Group> getGroupByTopic(@PathVariable String topic) {
-        return null;
-    }
+    public ResponseEntity<List<Group>> getGroupByTopic(@PathVariable String topic) {
 
-
-    @PostMapping("/group/createGroup")
-    public void createGroup(@RequestBody Group group, HttpServletRequest request) {
-
+        return new ResponseEntity<>(groupService.getByTopic(topic), HttpStatus.OK);
     }
 
 }

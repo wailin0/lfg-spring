@@ -1,8 +1,13 @@
 package com.lfg.spring.service;
 
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
 import com.lfg.spring.model.Group;
 import com.lfg.spring.model.Member;
 import com.lfg.spring.model.User;
+import com.lfg.spring.model.DTO.GroupDto;
 import com.lfg.spring.repository.GroupRepository;
 import com.lfg.spring.repository.MemberRepository;
 import com.lfg.spring.repository.UserRepository;
@@ -16,22 +21,36 @@ public class GroupService {
     private GroupRepository groupRepository;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private MemberService memberService;
 
-    @Autowired
-    private UserRepository userRepository;
+    public List<Group> getAll(){
+        
+        return groupRepository.findAll();
+    }
 
-    /*public Group create(GroupDto groupDto) {
+    public List<Group> getByTopic(String topic){
 
-        User user = userRepository.findByUsername(username);
+        return groupRepository.findByTopic(topic);
+    }
 
-        groupRepository.save(group);
-        Member member = new Member();  //make first member admin
-        member.setGroup(group);
-        member.setRole("ADMIN");
-        member.setUser(user);
-        memberRepository.save(member);
-    }*/
+    public Group create(GroupDto groupDto) {
+
+        Group group = new Group();
+        group.setDescription(groupDto.getDescription());
+        group.setCreatedAt(new Date());
+        group.setDisabled(false);
+        group.setMembers(new LinkedList<>());
+        group.setName(groupDto.getName());
+        group.setPosts(new LinkedList<>());
+        group.setTopic(groupDto.getTopic());
+        group.setType(groupDto.getType());
+
+        group = groupRepository.save(group);
+
+        memberService.createAdminIn(group);
+
+        return group;
+    }
 
     public Group getReference(Long groupId){
 
