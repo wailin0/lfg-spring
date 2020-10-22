@@ -29,7 +29,7 @@ import java.util.Date;
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @Column(unique = true)
@@ -40,7 +40,7 @@ public class User implements UserDetails {
 
     @JsonIgnore
     private String password;
-    private boolean isEnabled;
+    private boolean enabled;
     private String role;
 
     private Date createdAt;

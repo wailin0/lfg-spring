@@ -28,8 +28,8 @@ import org.hibernate.annotations.OnDeleteAction;
 public class Like {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private long likeId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long likesId;
 
     private boolean liked;
 
