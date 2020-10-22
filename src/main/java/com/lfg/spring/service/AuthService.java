@@ -48,9 +48,10 @@ public class AuthService {
             return principal.toString();
     }
 
-    public String signup(SignupDto signupDto) {
+    public User signup(SignupDto signupDto) {
 
         User user = new User();
+        user.setUsername(signupDto.getUsername());
         user.setEmail(signupDto.getEmail());
         user.setEnabled(true);
         user.setCreatedAt(new Date());
@@ -58,7 +59,7 @@ public class AuthService {
     
         userService.save(user);
 
-        return authenticate(signupDto.getUsername(), signupDto.getPassword());
+        return user;
     }
 
     public String authenticate(String username, String password) {

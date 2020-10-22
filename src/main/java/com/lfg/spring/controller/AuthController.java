@@ -1,7 +1,6 @@
 package com.lfg.spring.controller;
 
 import com.lfg.spring.JWT.JWTRequest;
-import com.lfg.spring.JWT.JWTResponse;
 import com.lfg.spring.JWT.JWTUtil;
 import com.lfg.spring.model.User;
 import com.lfg.spring.model.DTO.SignupDto;
@@ -32,7 +31,7 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignupDto signupDto){
+    public ResponseEntity<User> signup(@RequestBody SignupDto signupDto){
 
         return new ResponseEntity<>(authService.signup(signupDto), HttpStatus.CREATED);    
     }
