@@ -6,6 +6,6 @@ INSERT INTO Post (title, body, user_id, group_id) VALUES ('postTitle1', 'postBod
 
 INSERT INTO Member (role, disabled, user_id, group_id) VALUES ('ADMIN_ROLE', false ,(SELECT user_id FROM Users WHERE username='user1'), (SELECT group_id FROM Groups WHERE name='groupName1'));
 
-INSERT INTO Likes (liked, user_id, post_id) VALUES (true, (SELECT user_id FROM Users WHERE username='user1'), (SELECT user_id FROM Post WHERE title='postTitle1'));
+INSERT INTO Likes (liked, user_id, post_id) VALUES (true, (SELECT user_id FROM Users WHERE username='user1'), (SELECT post_id FROM Post WHERE title='postTitle1'));
 
-INSERT INTO Comment (body, user_id, post_id) VALUES ('comentBody1', (SELECT user_id FROM Users WHERE username='user1'), (SELECT user_id FROM Post WHERE title='postTitle1'));
+INSERT INTO Comment (body, user_id, post_id) VALUES ('comentBody1', (SELECT user_id FROM Users WHERE username='user1'), (SELECT post_id FROM Post WHERE title='postTitle1'));
