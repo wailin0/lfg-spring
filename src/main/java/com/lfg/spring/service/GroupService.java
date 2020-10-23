@@ -5,12 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.lfg.spring.model.Group;
-import com.lfg.spring.model.Member;
-import com.lfg.spring.model.User;
 import com.lfg.spring.model.DTO.GroupDto;
 import com.lfg.spring.repository.GroupRepository;
-import com.lfg.spring.repository.MemberRepository;
-import com.lfg.spring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

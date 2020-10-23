@@ -7,8 +7,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 import java.util.Date;
 import java.util.List;
 

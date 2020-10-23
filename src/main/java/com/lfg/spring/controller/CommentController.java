@@ -19,10 +19,22 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @GetMapping("/comments/{postId}")
+    @GetMapping("/comments")
+    public ResponseEntity<List<Comment>> getAll(){
+        
+        return new ResponseEntity<>(commentService.getAll(), HttpStatus.OK);
+    }
+
+    @GetMapping("/comments/post/{postId}")
     public ResponseEntity<List<Comment>> getByPostId(@PathVariable Long postId) {
         
         return new ResponseEntity<>(commentService.getByPostId(postId), HttpStatus.OK); 
+    }
+
+    @GetMapping("/comments/user/{userId}")
+    public ResponseEntity<List<Comment>> getByUserId(@PathVariable Long userId) {
+        
+        return new ResponseEntity<>(commentService.getByUserId(userId), HttpStatus.OK); 
     }
 
     @PostMapping("/comments")

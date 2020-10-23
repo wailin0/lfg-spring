@@ -3,15 +3,11 @@ package com.lfg.spring.service;
 import java.util.Date;
 import java.util.List;
 
-import com.lfg.spring.JWT.JWTUtil;
 import com.lfg.spring.model.Group;
 import com.lfg.spring.model.Member;
 import com.lfg.spring.model.User;
-import com.lfg.spring.model.DTO.MemberDto;
 import com.lfg.spring.model.enums.MemberRole;
-import com.lfg.spring.repository.GroupRepository;
 import com.lfg.spring.repository.MemberRepository;
-import com.lfg.spring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -43,9 +39,10 @@ public class MemberService {
         Member member = new Member();
         User user = authService.getCurrentLoggedInUser();
 
-        if(memberRepository.isUserInGroup(user.getUserId(), groupId));
+        if(memberRepository.isUserInGroup(user.getUserId(), groupId))
             // TODO: throw an error
-            
+            return null;
+
         member.setGroup(groupService.getReference(groupId));
         member.setJoinedAt(new Date());
         member.setRole(MemberRole.MEMBER_ROLE.name());

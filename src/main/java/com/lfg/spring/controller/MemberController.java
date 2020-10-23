@@ -1,16 +1,12 @@
 package com.lfg.spring.controller;
 
-import com.lfg.spring.JWT.JWTUtil;
 import com.lfg.spring.model.Member;
-import com.lfg.spring.model.DTO.MemberDto;
-import com.lfg.spring.repository.MemberRepository;
 import com.lfg.spring.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @CrossOrigin

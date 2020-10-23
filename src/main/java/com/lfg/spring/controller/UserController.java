@@ -1,10 +1,7 @@
 package com.lfg.spring.controller;
 
-import com.lfg.spring.JWT.JWTUtil;
 import com.lfg.spring.model.User;
-import com.lfg.spring.repository.UserRepository;
 import com.lfg.spring.service.AuthService;
-import com.lfg.spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +25,5 @@ public class UserController {
         
         return new ResponseEntity<>(authService.getCurrentLoggedInUser(), HttpStatus.OK);
     }
-
 
 }

@@ -33,6 +33,11 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    public List<Comment> getAll(){
+        
+        return commentRepository.findAll();
+    } 
+
     public List<Comment> getByPostId(Long postId){
         
         return commentRepository.findAllByPostId(postId);

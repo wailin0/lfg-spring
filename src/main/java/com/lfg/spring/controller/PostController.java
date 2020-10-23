@@ -1,6 +1,5 @@
 package com.lfg.spring.controller;
 
-import com.lfg.spring.JWT.JWTUtil;
 import com.lfg.spring.model.Post;
 import com.lfg.spring.model.DTO.PostDto;
 import com.lfg.spring.service.PostService;
@@ -9,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @CrossOrigin

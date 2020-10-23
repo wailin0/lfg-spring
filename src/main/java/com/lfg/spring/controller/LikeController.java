@@ -2,7 +2,6 @@ package com.lfg.spring.controller;
 
 import com.lfg.spring.model.Like;
 import com.lfg.spring.model.DTO.LikeDto;
-import com.lfg.spring.repository.LikeRepository;
 import com.lfg.spring.service.LikeService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @CrossOrigin
 @RestController
@@ -21,13 +19,13 @@ public class LikeController {
     @Autowired
     private LikeService likeService;
 
-    @GetMapping("/likes/{postId}")
+    @GetMapping("/likes/post/{postId}")
     public ResponseEntity<List<Like>> getByPostId(@PathVariable Long postId) {
         
         return new ResponseEntity<>(likeService.getByPostId(postId), HttpStatus.OK);
     }
 
-    @GetMapping("/likes/{userId}")
+    @GetMapping("/likes/user/{userId}")
     public ResponseEntity<List<Like>> getByUserId(@PathVariable Long userId) {
         
         return new ResponseEntity<>(likeService.getByUserId(userId), HttpStatus.OK);

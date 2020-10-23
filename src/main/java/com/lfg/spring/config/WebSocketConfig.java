@@ -13,7 +13,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new webSocketHandler(), "/registry");
+        
+        registry.addHandler(new webSocketHandler(), "/");
     }
 
 }
