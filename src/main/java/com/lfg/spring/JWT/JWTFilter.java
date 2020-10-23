@@ -1,7 +1,6 @@
 
 package com.lfg.spring.JWT;
 
-import com.lfg.spring.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +17,9 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.lfg.spring.service.UserService;
+
 import java.io.IOException;
 
 @Component
@@ -27,7 +29,7 @@ public class JWTFilter extends OncePerRequestFilter {
     private JWTUtil jwtUtil;
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsServiceImpl;
+    private UserService userService;
 
     private static final Logger logger = LoggerFactory.getLogger(JWTFilter.class);
 
@@ -51,7 +53,7 @@ public class JWTFilter extends OncePerRequestFilter {
         }
         logger.debug("JWT_TOKEN_USERNAME_VALUE '{}'", username);
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
+            UserDetails userDetails = userService.loadUserByUsername(username);
             if (jwtUtil.validateToken(jwtToken, userDetails)) {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

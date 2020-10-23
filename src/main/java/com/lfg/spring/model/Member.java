@@ -1,38 +1,38 @@
 package com.lfg.spring.model;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.Setter;
 
 import javax.persistence.*;
+
 import java.util.Date;
 
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Members {
+public class Member {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long memberId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "groupId")
+    private Group group;
 
-    @ManyToOne()
-    private Users users;
-
-
-    @ManyToOne()
-    private Groups groups;
+    @MapsId
+    @OneToOne
+    @JoinColumn(name="userId")
+    private User user;
 
     private String role;
 
     private boolean disabled;
 
-    @CreationTimestamp
-    @Temporal(TemporalType.DATE)
-    private Date joinedDate;
-
+    private Date joinedAt;
 
 }

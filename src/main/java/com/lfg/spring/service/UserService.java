@@ -1,22 +1,42 @@
 package com.lfg.spring.service;
 
-import com.lfg.spring.model.Users;
-import com.lfg.spring.repository.UsersRepository;
+import java.util.Optional;
+
+import com.lfg.spring.model.User;
+import com.lfg.spring.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
-    private UsersRepository usersRepository;
+    private UserRepository userRepository;
 
-//    @Autowired
-//    private BCryptPasswordEncoder encoder;
+    public User getReference(Long userId) {
 
-    public void registerUser(Users user) {
-        user.setRole("USER");
-        user.setEnabled(true);  // for testing
-        usersRepository.save(user);
+        return userRepository.getOne(userId);
     }
+
+    @Override
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+
+        if(userOptional.isPresent())
+            return userOptional.get();
+
+        log.error("User not found with username {}", username);
+        throw new UsernameNotFoundException(username);
+    }
+
+    public User save(User user){
+
+        return userRepository.save(user);
+    }
+        
 }

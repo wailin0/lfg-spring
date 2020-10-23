@@ -1,11 +1,12 @@
 package com.lfg.spring.service;
 
-import com.lfg.spring.model.Groups;
-import com.lfg.spring.model.Members;
-import com.lfg.spring.model.Users;
-import com.lfg.spring.repository.GroupsRepository;
-import com.lfg.spring.repository.MembersRepository;
-import com.lfg.spring.repository.UsersRepository;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.lfg.spring.model.Group;
+import com.lfg.spring.model.DTO.GroupDto;
+import com.lfg.spring.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,23 +14,43 @@ import org.springframework.stereotype.Service;
 public class GroupService {
 
     @Autowired
-    private GroupsRepository groupsRepository;
+    private GroupRepository groupRepository;
 
     @Autowired
-    private MembersRepository membersRepository;
+    private MemberService memberService;
 
-    @Autowired
-    private UsersRepository usersRepository;
-
-    public void createGroup(String username, Groups group) {
-
-        Users user = usersRepository.findByUsername(username);
-
-        groupsRepository.save(group);
-        Members members = new Members();  //make first member admin
-        members.setGroups(group);
-        members.setRole("ADMIN");
-        members.setUsers(user);
-        membersRepository.save(members);
+    public List<Group> getAll(){
+        
+        return groupRepository.findAll();
     }
+
+    public List<Group> getByTopic(String topic){
+
+        return groupRepository.findByTopic(topic);
+    }
+
+    public Group create(GroupDto groupDto) {
+
+        Group group = new Group();
+        group.setDescription(groupDto.getDescription());
+        group.setCreatedAt(new Date());
+        group.setDisabled(false);
+        group.setMembers(new LinkedList<>());
+        group.setName(groupDto.getName());
+        group.setPosts(new LinkedList<>());
+        group.setTopic(groupDto.getTopic());
+        group.setType(groupDto.getType());
+
+        group = groupRepository.save(group);
+
+        memberService.createAdminIn(group);
+
+        return group;
+    }
+
+    public Group getReference(Long groupId){
+
+        return groupRepository.getOne(groupId);
+    }
+
 }

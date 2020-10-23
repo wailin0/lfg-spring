@@ -2,7 +2,8 @@ package com.lfg.spring.config;
 
 import com.lfg.spring.JWT.JWTAuthEntryPoint;
 import com.lfg.spring.JWT.JWTFilter;
-import com.lfg.spring.service.UserDetailsServiceImpl;
+import com.lfg.spring.service.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +15,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -24,7 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsServiceImpl;
+    private UserService userService;
 
     @Autowired
     private JWTFilter jwtFilter;
@@ -34,7 +35,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsServiceImpl);
+        
+        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -43,12 +45,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers(HttpMethod.GET).permitAll()
-                .antMatchers(HttpMethod.POST,"/api/user","/api/login").permitAll()
-                .antMatchers("/api/**").hasRole("USER")
-                .anyRequest().authenticated()
+                /*.antMatchers(HttpMethod.OPTIONS).permitAll()
+                .antMatchers("/api/auth/**").hasRole("USER")
+                .anyRequest().authenticated()*/
+                .antMatchers("/**").permitAll()
                 .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+    
+        // to allow h2 console to open
+        http.headers().frameOptions().disable();
     }
 
     @Override
@@ -57,15 +61,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/login");
     }
 
-    @Override
     @Bean
+    @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
+        
         return super.authenticationManagerBean();
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        
+        return new BCryptPasswordEncoder(); 
     }
 
 }
