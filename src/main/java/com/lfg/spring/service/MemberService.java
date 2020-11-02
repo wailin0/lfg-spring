@@ -52,9 +52,8 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Member createAdminIn(Group group){
+    public void createAdminIn(Group group){
         User user = authService.getCurrentLoggedInUser();
-
         Member member = new Member();
         member.setGroup(group);
         member.setJoinedAt(new Date());
@@ -62,7 +61,7 @@ public class MemberService {
         member.setDisabled(false);
         member.setUser(user);
 
-        return member;
+        memberRepository.save(member);
     }
     
     

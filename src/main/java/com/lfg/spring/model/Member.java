@@ -1,5 +1,6 @@
 package com.lfg.spring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,13 +21,14 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "groupId")
+    @JoinColumn(nullable = false, name = "groupId")
     private Group group;
 
     @MapsId
     @OneToOne
-    @JoinColumn(name="userId")
+    @JoinColumn(nullable = false,name="userId")
     private User user;
 
     private String role;

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Transactional
 @Repository
@@ -14,5 +15,8 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
 
     @Query("SELECT g FROM Group g WHERE g.topic = :topic")
     public List<Group> findByTopic(String topic);
-    
+
+    List<Group> findByUserUserId(Long userId);
+
+    Optional<Group> findByName(String groupName);
 }

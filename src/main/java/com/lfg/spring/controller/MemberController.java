@@ -11,25 +11,25 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class MemberController {
 
     @Autowired
     private MemberService memberService;
 
     
-    @GetMapping("/members")
+    @GetMapping("/member")
     public List<Member> getAll(){
         return memberService.getAll();
     }
 
-    @GetMapping("/members/{groupId}")
+    @GetMapping("/group/{groupId}/member")
     public ResponseEntity<List<Member>> getByGroupId(@PathVariable Long groupId){
 
         return new ResponseEntity<>(memberService.getByGroupId(groupId), HttpStatus.OK);
     }
 
-    @PostMapping("/members/{groupId}")
+    @PostMapping("/group/{groupId}/member")
     public ResponseEntity<Member> create(@PathVariable Long groupId){
 
         return new ResponseEntity<>(memberService.create(groupId), HttpStatus.CREATED);

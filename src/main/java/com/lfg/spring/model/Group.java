@@ -1,5 +1,6 @@
 package com.lfg.spring.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,18 +23,29 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long groupId;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String topic;
+    @Column(nullable = false)
     private String description;
+    @Column(nullable = false)
     private String type;
 
-    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
-    private List<Post> posts;
 
+
+    @ManyToOne
+    @JsonIgnore
+    private User user;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
-    private List<Member> members;
+    private List<Post> post;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "group", fetch = FetchType.LAZY)
+    private List<Member> member;
 
     private boolean disabled;
 

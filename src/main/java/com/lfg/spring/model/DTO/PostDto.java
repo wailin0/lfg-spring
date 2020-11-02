@@ -11,7 +11,5 @@ public class PostDto {
     
     private String title;
     private String body;
-    private Long userId;
-    private Long groupId;
 
 }

@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Setter
 @Getter
@@ -29,18 +30,27 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String email;
 
     @JsonIgnore
+    @Column(nullable = false)
     private String password;
     private boolean enabled;
     private String role;
 
     private Date createdAt;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Post> post;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Group> group;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

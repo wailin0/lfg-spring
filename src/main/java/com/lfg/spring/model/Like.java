@@ -29,11 +29,11 @@ public class Like {
 
     private boolean liked;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name="userId", referencedColumnName="userId")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name="postId", referencedColumnName="postId")
     private Post post;
 

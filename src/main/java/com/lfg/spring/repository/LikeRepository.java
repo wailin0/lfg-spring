@@ -30,4 +30,12 @@ public interface LikeRepository extends JpaRepository<Like, Long> {
     @Modifying
     @Query("DELETE FROM Like l WHERE l.user.id = :userId AND l.id = :postId")
     public void deleteByUserAndPostId(Long postId, Long userId);
+
+    int countByPostPostIdAndLiked(Long postId, boolean b);
+
+    Like findByPostPostIdAndUserUserIdAndLiked(Long postId, Long userId, boolean b);
+
+    void deleteByPostPostIdAndUserUserIdAndLiked(Long postId, Long userId, boolean b);
+
+    Like findByPost_PostIdAndUser_UserId(Long postId, Long userId);
 }

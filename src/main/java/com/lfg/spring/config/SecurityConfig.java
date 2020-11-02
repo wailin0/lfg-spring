@@ -45,20 +45,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(jwtAuthEntryPoint).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                /*.antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers("/api/auth/**").hasRole("USER")
-                .anyRequest().authenticated()*/
-                .antMatchers("/**").permitAll()
+//                .antMatchers(HttpMethod.OPTIONS).permitAll()
+//                .antMatchers(HttpMethod.GET).permitAll()
+                .antMatchers("/**").permitAll()  // to change
+                .anyRequest().authenticated()
                 .and().addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     
         // to allow h2 console to open
         http.headers().frameOptions().disable();
     }
-
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(HttpMethod.GET, "/api/register")
-                .antMatchers(HttpMethod.POST, "/api/login");
+        web.ignoring().antMatchers("/api/all/**", "/**");
     }
 
     @Bean

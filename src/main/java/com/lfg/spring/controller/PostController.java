@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @CrossOrigin
@@ -18,30 +19,35 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @GetMapping("/posts")
+    @GetMapping("/all/post")
     public ResponseEntity<List<Post>> getAll(){
 
         return new ResponseEntity<>(postService.getAll(), HttpStatus.OK); 
     }
 
-    @GetMapping("/posts/{groupId}")
+    @GetMapping("/group/{groupId}/post")
     public ResponseEntity<List<Post>> getByGroupId(@PathVariable Long groupId) {
 
         return new ResponseEntity<>(postService.getByGroupId(groupId), HttpStatus.OK); 
     }
 
-    @PostMapping("/posts")
-    public ResponseEntity<Post> create(@RequestBody PostDto postDto){
+    @PostMapping("/group/{groupId}/post")
+    public ResponseEntity<Post> create(@PathVariable Long groupId, @RequestBody PostDto postDto) throws Exception {
 
-        return new ResponseEntity<>(postService.create(postDto), HttpStatus.CREATED);
+        return new ResponseEntity<>(postService.create(postDto, groupId), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<?> delete(@PathVariable Long postId) {
+    @DeleteMapping("/post/{postId}")
+    public ResponseEntity<?> delete(@PathVariable Long postId) throws Exception {
 
         postService.delete(postId);
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @PutMapping("/post/{postId}")
+    public ResponseEntity<Post> updatePostController(@PathVariable Long postId,
+                                                      @RequestBody Post post) throws Exception {
+        Post updatedPost = postService.updatePost(post, postId);
+        return ResponseEntity.ok(updatedPost);
+    }
 }

@@ -1,13 +1,19 @@
 package com.lfg.spring.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.lfg.spring.model.Like;
+import com.lfg.spring.model.Post;
 import com.lfg.spring.model.User;
 import com.lfg.spring.model.DTO.LikeDto;
+import com.lfg.spring.repository.CommentRepository;
 import com.lfg.spring.repository.LikeRepository;
 
+import com.lfg.spring.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,46 +26,76 @@ public class LikeService {
     private PostService postService;
 
     @Autowired
+    private CommentRepository commentRepository;
+
+    @Autowired
+    private PostRepository postRepository;
+
+    @Autowired
     private AuthService authService;
 
-    public List<Like> getByPostId(Long postId){
+    public ResponseEntity<Map<String, Integer>> getLikesFromAPost(Long postId) {
 
-        return likeRepository.findByPostId(postId);
+        int likeCount = likeRepository.countByPostPostIdAndLiked(postId, true);
+        int dislikeCount = likeRepository.countByPostPostIdAndLiked(postId, false);
+        int commentCount = commentRepository.countByPostPostId(postId);
+        return ResponseEntity.status(HttpStatus.OK).body(Map.of(
+                "likeCount", likeCount,
+                "dislikeCount", dislikeCount,
+                "commentCount", commentCount));
     }
 
-    public List<Like> getByUserId(Long userId){
+    public void changeVotes(Long postId, Like like) {
+        User user = authService.getCurrentLoggedInUser();
+        Like voteToChange = likeRepository.findByPost_PostIdAndUser_UserId(postId, user.getUserId());
+        voteToChange.setLiked(like.isLiked());
+        likeRepository.save(voteToChange);
+    }
+
+
+    public List<Like> getByUserId(Long userId) {
 
         return likeRepository.findByUserId(userId);
     }
 
-	public void like(LikeDto likeDto) {
+    public void like(LikeDto likeDto, Long postId) {
         User user = authService.getCurrentLoggedInUser();
-
-        if(likeRepository.isPostLikedByUser(user.getUserId(), likeDto.getPostId()))
-            update(likeDto.getPostId(), user.getUserId(), likeDto.isLiked());
-        else
-            create(likeDto, user);
+        create(likeDto, user, postId);
     }
 
-    public void delete(LikeDto likeDto) {
+    public void delete(Long postId, String vote) {
         User user = authService.getCurrentLoggedInUser();
-
-        likeRepository.deleteByUserAndPostId(user.getUserId(), likeDto.getPostId());
+        if (vote.equals("like")) {
+            likeRepository.deleteByPostPostIdAndUserUserIdAndLiked(postId, user.getUserId(), true);
+        } else if (vote.equals("dislike")) {
+            likeRepository.deleteByPostPostIdAndUserUserIdAndLiked(postId, user.getUserId(), false);
+        }
     }
 
-    private void create(LikeDto likeDto, User user){
+    private void create(LikeDto likeDto, User user, Long postId) {
+
         Like like = new Like();
-
+        Post post = postRepository.findById(postId).orElse(null);
         like.setLiked(likeDto.isLiked());
-        like.setPost(postService.getReference(likeDto.getPostId()));
+        like.setPost(post);
         like.setUser(user);
 
         likeRepository.save(like);
     }
 
-    private void update(Long postId, Long userId, boolean liked){
+    private void update(Long postId, Long userId, boolean liked) {
 
         likeRepository.updateByPostAndUserId(postId, userId, liked);
     }
-    
+
+    public Like getLoggedInUserVotes(Long postId, String vote) throws Exception {
+        User user = authService.getCurrentLoggedInUser();
+        if (vote.equals("like")) {
+            return likeRepository.findByPostPostIdAndUserUserIdAndLiked(postId, user.getUserId(), true);
+        } else if (vote.equals("dislike")) {
+            return likeRepository.findByPostPostIdAndUserUserIdAndLiked(postId, user.getUserId(), false);
+        } else {
+            throw new Exception("wrong vote ");
+        }
+    }
 }

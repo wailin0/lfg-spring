@@ -9,40 +9,56 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class LikeController {
 
     @Autowired
     private LikeService likeService;
 
-    @GetMapping("/likes/post/{postId}")
-    public ResponseEntity<List<Like>> getByPostId(@PathVariable Long postId) {
+
+    // get like, dislike and comment count as a json
+    @GetMapping("/post/{postId}/vote")
+    public ResponseEntity<Map<String, Integer>> getLikeAndCommentCount(@PathVariable Long postId) {
         
-        return new ResponseEntity<>(likeService.getByPostId(postId), HttpStatus.OK);
+        return likeService.getLikesFromAPost(postId);
     }
 
-    @GetMapping("/likes/user/{userId}")
-    public ResponseEntity<List<Like>> getByUserId(@PathVariable Long userId) {
-        
-        return new ResponseEntity<>(likeService.getByUserId(userId), HttpStatus.OK);
+
+    @GetMapping("/post/{postId}/user/{vote}")
+    public Like getUserLikeByPostIdAndUserId(@PathVariable String vote,
+                                              @PathVariable Long postId) throws Exception {
+
+        return likeService.getLoggedInUserVotes(postId, vote);
     }
 
-    @PostMapping("/likes")
-    public ResponseEntity<Like> like(@RequestBody LikeDto likeDto) {
+    @PostMapping("/post/{postId}/user/vote")
+    public ResponseEntity<Like> like(@PathVariable Long postId,
+                                     @RequestBody LikeDto likeDto) {
         
-        likeService.like(likeDto);
+        likeService.like(likeDto, postId);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/likes")
-    public ResponseEntity<Like> delete(@RequestBody LikeDto likeDto) {
+    @PutMapping("/post/{postId}/user/vote")
+    public void changeVote(@PathVariable Long postId,
+                           @RequestBody Like like) {
+
+        likeService.changeVotes(postId, like);
+    }
+
+
+    @DeleteMapping("/post/{postId}/user/{vote}")
+    public ResponseEntity<Like> delete(@PathVariable String vote,
+                                       @PathVariable Long postId) {
         
-        likeService.delete(likeDto);
+        likeService.delete(postId, vote);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

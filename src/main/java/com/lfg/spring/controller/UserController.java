@@ -20,7 +20,7 @@ public class UserController {
     @Autowired
     private AuthService authService;
 
-   @GetMapping("/user/info")
+   @GetMapping("/user")
     public ResponseEntity<User> getUserByUsername(HttpServletRequest request) {
         
         return new ResponseEntity<>(authService.getCurrentLoggedInUser(), HttpStatus.OK);

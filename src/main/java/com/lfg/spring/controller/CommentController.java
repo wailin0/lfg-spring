@@ -9,38 +9,41 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api")
 public class CommentController {
 
     @Autowired
     private CommentService commentService;
 
-    @GetMapping("/comments")
-    public ResponseEntity<List<Comment>> getAll(){
-        
-        return new ResponseEntity<>(commentService.getAll(), HttpStatus.OK);
-    }
 
-    @GetMapping("/comments/post/{postId}")
+    @GetMapping("/post/{postId}/comment")
     public ResponseEntity<List<Comment>> getByPostId(@PathVariable Long postId) {
         
         return new ResponseEntity<>(commentService.getByPostId(postId), HttpStatus.OK); 
     }
 
-    @GetMapping("/comments/user/{userId}")
-    public ResponseEntity<List<Comment>> getByUserId(@PathVariable Long userId) {
+    @PostMapping("/post/{postId}/comment")
+    public ResponseEntity<Comment> create(@PathVariable Long postId, @RequestBody CommentDto commentDto){
         
-        return new ResponseEntity<>(commentService.getByUserId(userId), HttpStatus.OK); 
+        return new ResponseEntity<>(commentService.create(commentDto, postId), HttpStatus.CREATED);
     }
 
-    @PostMapping("/comments")
-    public ResponseEntity<Comment> create(@RequestBody CommentDto commentDto){
-        
-        return new ResponseEntity<>(commentService.create(commentDto), HttpStatus.CREATED);
+    @DeleteMapping("/comment/{commentId}")
+    public void deleteAComment(@PathVariable Long commentId) {
+
+        commentService.deleteComment(commentId);
+    }
+
+    @PutMapping("/comment/{commentId}")
+    public ResponseEntity<Comment> updateAComment(@PathVariable Long commentId,
+                                                   @RequestBody Comment comment) {
+
+        return ResponseEntity.ok().body(commentService.updateComment(comment, commentId));
     }
 
 }
