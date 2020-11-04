@@ -14,7 +14,7 @@ import java.util.List;
 public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
 
     // gets usernames of a user's friends
-    @Query("SELECT f.friendOf.userId FROM Friendship f WHERE f.user.username = :username AND f.friendOf.isOnline = TRUE")
-    public List<UserId> findOnlineFriendsOf(String username);
+    @Query("SELECT f.friendOf.userId FROM Friendship f WHERE f.user.id = :userId AND f.friendOf.isOnline = TRUE")
+    public List<UserId> findOnlineFriendsOf(Long userId);
 
 }
