@@ -11,10 +11,14 @@ import javax.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -37,33 +41,48 @@ public class User implements UserDetails {
 
     @JsonIgnore
     private String password;
-    private boolean enabled;
-    private String role;
 
     private Date createdAt;
 
+    private String roles;
+    private boolean accountNonExpired;
+    private boolean accountNotLocked;
+    private boolean credentialsNonExpired;
+    private boolean enabled;
+
+    @ManyToMany(mappedBy="user")
+    private List<Friendship> friendships;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // TODO Auto-generated method stub
-        return null;
+
+        return Arrays.stream(roles.split(","))
+            .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     @Override
     public boolean isAccountNonExpired() {
-        // TODO Auto-generated method stub
-        return true;
+        
+        return accountNonExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        // TODO Auto-generated method stub
-        return true;
+
+        return accountNotLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        // TODO Auto-generated method stub
-        return true;
+        
+        return credentialsNonExpired;
+    }
+
+    @Override
+    public boolean isEnabled() {
+
+        return enabled;
     }
 
 }
