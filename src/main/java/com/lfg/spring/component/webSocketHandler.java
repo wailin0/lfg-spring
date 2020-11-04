@@ -3,7 +3,9 @@ package com.lfg.spring.component;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.lfg.spring.model.enums.WSEvent;
 import com.lfg.spring.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,65 +18,24 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import lombok.SneakyThrows;
 
+@FunctionalInterface
+interface WSFunctionHandler {
+    
+    public void handle(Long fromUser, TextMessage textMessage);
+}
+
 @Component
 public class webSocketHandler extends TextWebSocketHandler {
+
+    // having a websocket connections means the user is online
+    private HashMap<String, WebSocketSession> connections = new HashMap<String, WebSocketSession>();
+
+    // because number of events will increase in the near future this way we will avoid the long-ugly if or switch statements
+    private final Map<String, WSFunctionHandler> handlers = Map.of(WSEvent.CHAT.name(), new webSocketHandler()::HandleChatEvent);
 
     @Autowired
     private UserService userService;
 
-    // holds username and ws.session
-    private HashMap<String, WebSocketSession> onlineUsers = new HashMap<String, WebSocketSession>();
-
-    @SneakyThrows(Exception.class)
-    public void handleTextMessage(WebSocketSession client, TextMessage textMessage) {
-        JSONObject message = new JSONObject(textMessage.getPayload());
-    
-        String toUser = (String) message.get("message_to");
-
-        if(isOnline(toUser));
-            send(toUser, textMessage);
-
-        // TODO: save the message in db
-    }
-
-    @Override
-    public void afterConnectionEstablished(WebSocketSession client){
-        // TODO: if this client have friends notify them about being online
-        System.out.println(client.getPrincipal().getName());
-        //onlineUsers.put(client.getPrincipal().getName(), client);
-    }
-
-    public void broadcast(WebSocketSession sender, TextMessage message){
-        for(WebSocketSession client : onlineUsers.values())
-            send(client, message);
-    }
-
-    private List<WebSocketSession> getOnlineFriendsOf(String username){ 
-
-        return null;
-    }
-    
-    private boolean isOnline(String username){
-    
-        return onlineUsers.containsKey(username);
-    }
-
-    @SneakyThrows(IOException.class)
-    public void send(String username, TextMessage message){
-
-        onlineUsers.get(username).sendMessage(message);
-    }
-
-    @SneakyThrows(IOException.class)
-    public void send(WebSocketSession session, TextMessage message){
-
-        session.sendMessage(message);
-    }
-
-    @Override
-    public void afterConnectionClosed(WebSocketSession client, CloseStatus status){
-
-        onlineUsers.remove(client.getPrincipal().toString());
-    }
+    private void HandleChatEvent(Long fromUser, TextMessage textMessage){ }
 
 }
