@@ -26,7 +26,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     // to add userId attribute in the ws session
     @Bean
-    private HandshakeInterceptor authInterceptor() {
+    public HandshakeInterceptor authInterceptor() {
         return new HandshakeInterceptor() {
             @Override
             public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, 

@@ -24,12 +24,12 @@ public class Message {
 
     @MapsId
     @OneToOne
-    @JoinColumn(name="userId")
+    @JoinColumn(name="userId", referencedColumnName="userId")
     private User toUser;
 
     @MapsId
     @OneToOne
-    @JoinColumn(name="userId")
+    @JoinColumn(name="userId", referencedColumnName="userId")
     private User fromUser;
 
     private Date sentAt;

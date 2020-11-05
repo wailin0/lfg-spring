@@ -21,12 +21,12 @@ public class Member {
     private Long memberId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "groupId")
+    @JoinColumn(name="groupId", referencedColumnName="groupId")
     private Group group;
 
     @MapsId
     @OneToOne
-    @JoinColumn(name="userId")
+    @JoinColumn(name="userId", referencedColumnName="userId")
     private User user;
 
     private String role;

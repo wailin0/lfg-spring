@@ -27,7 +27,7 @@ public class Friendship {
 
     @MapsId
     @OneToOne
-    @JoinColumn(name="userId")
+    @JoinColumn(name="friendOfId")
     private User friendOf;
 
     private FriendshipStatus status;

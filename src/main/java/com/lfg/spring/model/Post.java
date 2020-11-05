@@ -24,11 +24,11 @@ public class Post {
     private String body;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId")
+    @JoinColumn(name="userId", referencedColumnName="userId")
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "groupId")
+    @JoinColumn(name = "groupId", referencedColumnName="groupId")
     private Group group;
 
     private Date createdAt;

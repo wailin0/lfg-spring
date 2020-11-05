@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.lfg.spring.model.Friendship;
 import com.lfg.spring.model.Message;
 import com.lfg.spring.model.enums.WSEvent;
 import com.lfg.spring.model.projections.UserId;
@@ -39,7 +38,7 @@ public class webSocketHandler extends TextWebSocketHandler {
     private HashMap<Long, WebSocketSession> connections = new HashMap<Long, WebSocketSession>();
 
     // because number of events will increase in the near future this way we will avoid the long-ugly if or switch statements
-    private final Map<String, WSFunctionHandler> handlers = Map.of(WSEvent.CHAT.name(), new webSocketHandler()::HandleChatEvent);
+    //private final Map<String, WSFunctionHandler> handlers = Map.of(WSEvent.CHAT.name(), new webSocketHandler()::HandleChatEvent);
 
     @Autowired
     private UserService userService;
@@ -71,12 +70,12 @@ public class webSocketHandler extends TextWebSocketHandler {
         JSONObject message = new JSONObject(textMessage.getPayload());
 
         String event = (String) message.get("event");
-        WSFunctionHandler handler = handlers.get(event);
+        //WSFunctionHandler handler = handlers.get(event);
 
-        if(handler == null)
-            throw new IllegalArgumentException("Invalid handler of type: " + event);
+        //if(handler == null)
+            //throw new IllegalArgumentException("Invalid handler of type: " + event);
     
-        handler.handle(getUserId(client), textMessage);
+        //handler.handle(getUserId(client), textMessage);
     }
 
     private void sendOnlineEventToFriendsOf(Long userId){

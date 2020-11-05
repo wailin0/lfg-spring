@@ -50,8 +50,7 @@ public class User implements UserDetails {
     private boolean credentialsNonExpired;
     private boolean enabled;
 
-    @ManyToMany(mappedBy="user")
-    private List<Friendship> friendships;
+    private boolean isOnline;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
