@@ -1,5 +1,6 @@
 package com.lfg.spring.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,10 +40,11 @@ public class LikeService {
         int likeCount = likeRepository.countByPostPostIdAndLiked(postId, true);
         int dislikeCount = likeRepository.countByPostPostIdAndLiked(postId, false);
         int commentCount = commentRepository.countByPostPostId(postId);
-        return ResponseEntity.status(HttpStatus.OK).body(Map.of(
-                "likeCount", likeCount,
-                "dislikeCount", dislikeCount,
-                "commentCount", commentCount));
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put("likeCount", likeCount);
+        map.put("dislikeCount", dislikeCount);
+        map.put("commentCount", commentCount);
+        return ResponseEntity.status(HttpStatus.OK).body(map);
     }
 
     public void changeVotes(Long postId, Like like) {
