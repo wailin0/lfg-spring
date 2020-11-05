@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.lfg.spring.model.Friendship;
+import com.lfg.spring.model.Message;
 import com.lfg.spring.model.enums.WSEvent;
 import com.lfg.spring.model.projections.UserId;
 import com.lfg.spring.service.FriendshipService;
+import com.lfg.spring.service.MessageService;
 import com.lfg.spring.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,9 @@ public class webSocketHandler extends TextWebSocketHandler {
 
     @Autowired
     private FriendshipService friendshipService;
+
+    @Autowired
+    private MessageService messageService;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session){
@@ -89,12 +94,17 @@ public class webSocketHandler extends TextWebSocketHandler {
         Long toUser = (Long) message.get("to");
 
         if(isOnline(toUser))
-            send(toUser, textMessage);
+            send(connections.get(toUser), textMessage);
 
-        messageService.save(new Message().builder()
+        messageService.save(Message.builder()
             .toUser(userService.getReference((Long) message.get("touser")))
             .fromUser(userService.getReference(fromUser))
-            .content(message.get("message")).build());
+            .content((String) message.get("message")).build());
+    }
+
+    private boolean isOnline(Long userId){
+    
+        return connections.containsKey(userId);
     }
 
     private void send(WebSocketSession client, TextMessage message){
