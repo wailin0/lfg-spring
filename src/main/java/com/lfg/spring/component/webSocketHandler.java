@@ -36,6 +36,32 @@ public class webSocketHandler extends TextWebSocketHandler {
     @Autowired
     private UserService userService;
 
-    private void HandleChatEvent(Long fromUser, TextMessage textMessage){ }
+    @Override
+    public void afterConnectionEstablished(WebSocketSession session){
+        Long userId = getUserId(session);
+
+        sendOnlineEventToFriendsOf(userId);
+
+        connections.put(client.getPrincipal(), client);
+    }
+
+    @Override
+    public void afterConnectionClosed(WebSocketSession client, CloseStatus status){
+
+        onlineUsers.remove(client.getPrincipal());
+    }
+
+    @Override
+    public void handleTextMessage(WebSocketSession client, TextMessage message) throws InterruptedException, IOException {
+        JSONObject message = new JSONObject(message.getPayload());
+
+        String event = message.get("event");
+        WSFunctionHandler handler = handlers.get(event);
+
+        if(handler == null)
+            throw new IllegalArgumentException("Invalid handler of type: " + event);
+    
+        handler.handle(getUserId(client), TextMessage);
+    }
 
 }
