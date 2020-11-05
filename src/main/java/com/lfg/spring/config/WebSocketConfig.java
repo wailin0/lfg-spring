@@ -21,7 +21,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 
-        registry.addHandler(new webSocketHandler(), "/userid/{id}").addInterceptors(authInterceptor());
+        registry.addHandler(new webSocketHandler(), "/api/all/userid/{id}").addInterceptors(authInterceptor());
     }
 
     // to add userId attribute in the ws session
