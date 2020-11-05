@@ -2,7 +2,8 @@ package com.lfg.spring.model.enums;
 
 public enum WSEvent {
     CHAT,
-    NOTIFICATION;
+    NOTIFICATION,
+    ONLINE;
 
     public String Chat(){
 

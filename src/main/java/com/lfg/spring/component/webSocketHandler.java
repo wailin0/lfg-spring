@@ -14,6 +14,7 @@ import com.lfg.spring.service.MessageService;
 import com.lfg.spring.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.configurationprocessor.json.JSONException;
 import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -65,6 +66,7 @@ public class webSocketHandler extends TextWebSocketHandler {
     }
 
     @Override
+    @SneakyThrows(JSONException.class)
     public void handleTextMessage(WebSocketSession client, TextMessage textMessage) throws InterruptedException, IOException {
         JSONObject message = new JSONObject(textMessage.getPayload());
 
@@ -82,14 +84,21 @@ public class webSocketHandler extends TextWebSocketHandler {
         List<UserId> friends = friendshipService.getOnlineFriendsOf(userId);
 
         friends.forEach(friend -> {
-            send(connections.get(friend.getUserId()), new TextMessage(new JSONObject()
-            .put("event", "online")
-            .put("user", userId)
-            .toString()));
+		    send(connections.get(friend.getUserId()), custructOnlineEventMessage(userId));
         });
     }
 
-    private HandleChatEvent(Long fromUser, TextMessage textMessage){
+    @SneakyThrows(JSONException.class)
+    private TextMessage custructOnlineEventMessage(Long sneder){
+
+        return new TextMessage(new JSONObject()
+        .put("event", WSEvent.ONLINE.name())
+        .put("user", sneder)
+        .toString());
+    }
+
+    @SneakyThrows(JSONException.class)
+    private void HandleChatEvent(Long fromUser, TextMessage textMessage){
         JSONObject message = new JSONObject(textMessage.getPayload());
         Long toUser = (Long) message.get("to");
 
@@ -110,7 +119,7 @@ public class webSocketHandler extends TextWebSocketHandler {
     private void send(WebSocketSession client, TextMessage message){
 
         try { client.sendMessage(message); } 
-            catch(IOException error){ log.error("Unable to send message to {} with error message {}", username, error); }
+            catch(IOException error){ log.error("Unable to send message {}", error); }
     }
 
     private Long getUserId(WebSocketSession session){
