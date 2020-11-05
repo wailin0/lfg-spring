@@ -36,15 +36,6 @@ public class Application {
     @Autowired
     private UserRepository userRepository;
 
-    @Bean
-    public CommandLineRunner loaddata(){
-        return (args) -> {
-
-            User user1 = User.builder().username("user").password(new BCryptPasswordEncoder().encode("pass")).email("user@gmail.com").enabled(true).createdAt(new Date()).role(UserRole.ROLE_ADMIN.name()).build();
-
-            userRepository.save(user1);
-
-        };
-    }
+    
 
 }
