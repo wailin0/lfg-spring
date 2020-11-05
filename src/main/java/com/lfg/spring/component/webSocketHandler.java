@@ -5,7 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lfg.spring.model.Friendship;
 import com.lfg.spring.model.enums.WSEvent;
+import com.lfg.spring.model.projections.UserId;
+import com.lfg.spring.service.FriendshipService;
 import com.lfg.spring.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 @FunctionalInterface
 interface WSFunctionHandler {
@@ -24,11 +28,12 @@ interface WSFunctionHandler {
     public void handle(Long fromUser, TextMessage textMessage);
 }
 
+@Slf4j
 @Component
 public class webSocketHandler extends TextWebSocketHandler {
 
     // having a websocket connections means the user is online
-    private HashMap<String, WebSocketSession> connections = new HashMap<String, WebSocketSession>();
+    private HashMap<Long, WebSocketSession> connections = new HashMap<Long, WebSocketSession>();
 
     // because number of events will increase in the near future this way we will avoid the long-ugly if or switch statements
     private final Map<String, WSFunctionHandler> handlers = Map.of(WSEvent.CHAT.name(), new webSocketHandler()::HandleChatEvent);
@@ -36,32 +41,73 @@ public class webSocketHandler extends TextWebSocketHandler {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private FriendshipService friendshipService;
+
     @Override
     public void afterConnectionEstablished(WebSocketSession session){
         Long userId = getUserId(session);
 
         sendOnlineEventToFriendsOf(userId);
 
-        connections.put(client.getPrincipal(), client);
+        connections.put(userId, session);
     }
 
     @Override
-    public void afterConnectionClosed(WebSocketSession client, CloseStatus status){
+    public void afterConnectionClosed(WebSocketSession session, CloseStatus status){
 
-        onlineUsers.remove(client.getPrincipal());
+        connections.remove(getUserId(session));
     }
 
     @Override
-    public void handleTextMessage(WebSocketSession client, TextMessage message) throws InterruptedException, IOException {
-        JSONObject message = new JSONObject(message.getPayload());
+    public void handleTextMessage(WebSocketSession client, TextMessage textMessage) throws InterruptedException, IOException {
+        JSONObject message = new JSONObject(textMessage.getPayload());
 
-        String event = message.get("event");
+        String event = (String) message.get("event");
         WSFunctionHandler handler = handlers.get(event);
 
         if(handler == null)
             throw new IllegalArgumentException("Invalid handler of type: " + event);
     
-        handler.handle(getUserId(client), TextMessage);
+        handler.handle(getUserId(client), textMessage);
     }
+
+    private void sendOnlineEventToFriendsOf(Long userId){
+
+        List<UserId> friends = friendshipService.getOnlineFriendsOf(userId);
+
+        friends.forEach(friend -> {
+            send(connections.get(friend.getUserId()), new TextMessage(new JSONObject()
+            .put("event", "online")
+            .put("user", userId)
+            .toString()));
+        });
+    }
+
+    private HandleChatEvent(Long fromUser, TextMessage textMessage){
+        JSONObject message = new JSONObject(textMessage.getPayload());
+        Long toUser = (Long) message.get("to");
+
+        if(isOnline(toUser))
+            send(toUser, textMessage);
+
+        messageService.save(new Message().builder()
+            .toUser(userService.getReference((Long) message.get("touser")))
+            .fromUser(userService.getReference(fromUser))
+            .content(message.get("message")).build());
+    }
+
+    private void send(WebSocketSession client, TextMessage message){
+
+        try { client.sendMessage(message); } 
+            catch(IOException error){ log.error("Unable to send message to {} with error message {}", username, error); }
+    }
+
+    private Long getUserId(WebSocketSession session){
+
+        return (Long) session.getAttributes().get("userId");
+    }
+
+
 
 }
