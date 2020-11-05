@@ -32,15 +32,4 @@ public class Application {
         return new Hibernate5Module();
     }
 
-	@Bean
-	public CommandLineRunner loaddata(CommentRepository commentRepository, MemberRepository memberRepository, PostRepository postRepository, UserRepository userRepository, GroupRepository groupRepository){
-        return (args) -> {
-
-            User user1 = User.builder().username("user").password(new BCryptPasswordEncoder().encode("pass")).email("user@gmail.com").enabled(true).createdAt(new Date()).role(UserRole.ROLE_ADMIN.name()).build();
-
-            userRepository.save(user1);
-
-         };
-    }
-
 }

@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name="groups")
+@Table(name="community")
 @Entity
 public class Group {
 
