@@ -7,7 +7,6 @@ import java.util.Map;
 
 import com.lfg.spring.model.Message;
 import com.lfg.spring.model.enums.WSEvent;
-import com.lfg.spring.model.projections.UserId;
 import com.lfg.spring.service.FriendshipService;
 import com.lfg.spring.service.MessageService;
 import com.lfg.spring.service.UserService;
@@ -79,12 +78,11 @@ public class webSocketHandler extends TextWebSocketHandler {
 
     private void sendOnlineEventToFriendsOf(Long userId){
 
-        List<UserId> friends = friendshipService.getOnlineFriendsOf(userId);
-
-        System.out.println(friends.size());
+        List<Long> friends = friendshipService.getOnlineFriendsOf(userId);
 
         friends.forEach(friend -> {
-		    send(connections.get(friend.getId()), custructOnlineEventMessage(userId));
+
+		    send(connections.get(friend), custructOnlineEventMessage(userId));
         });
     }
 

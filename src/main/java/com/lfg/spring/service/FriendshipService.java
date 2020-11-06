@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.lfg.spring.model.Friendship;
 import com.lfg.spring.model.enums.FriendshipStatus;
-import com.lfg.spring.model.projections.UserId;
 import com.lfg.spring.repository.FriendshipRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,7 @@ public class FriendshipService {
     @Autowired
     private UserService userService;
 
-    public List<UserId> getOnlineFriendsOf(Long userId){
+    public List<Long> getOnlineFriendsOf(Long userId){
 
         return friendshipRepository.findOnlineFriendsOf(userId);
     }
