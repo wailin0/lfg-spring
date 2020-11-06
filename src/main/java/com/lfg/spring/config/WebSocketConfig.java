@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.lfg.spring.component.webSocketHandler;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.ServerHttpRequest;
@@ -18,10 +19,13 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 @EnableWebSocket
 public class WebSocketConfig implements WebSocketConfigurer {
 
+    @Autowired
+    private webSocketHandler wsHandler;
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 
-        registry.addHandler(new webSocketHandler(), "/api/all/userid/{id}").addInterceptors(authInterceptor());
+        registry.addHandler(wsHandler, "/api/all/{id}").addInterceptors(authInterceptor()).setAllowedOrigins("*");
     }
 
     // to add userId attribute in the ws session
@@ -35,7 +39,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 String path = request.getURI().getPath();
     
                 // TODO: verify if current authenticated user is equal to this id and add is Authenticated attribute in the map
-                attributes.put("userId", path.substring(path.indexOf("/") + 1));
+                attributes.put("userId", path.substring(path.lastIndexOf("/") + 1));
 
                 return true;
             }

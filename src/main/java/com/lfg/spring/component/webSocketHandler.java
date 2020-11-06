@@ -34,12 +34,6 @@ interface WSFunctionHandler {
 @Component
 public class webSocketHandler extends TextWebSocketHandler {
 
-    // having a websocket connections means the user is online
-    private HashMap<Long, WebSocketSession> connections = new HashMap<Long, WebSocketSession>();
-
-    // because number of events will increase in the near future this way we will avoid the long-ugly if or switch statements
-    //private final Map<String, WSFunctionHandler> handlers = Map.of(WSEvent.CHAT.name(), new webSocketHandler()::HandleChatEvent);
-
     @Autowired
     private UserService userService;
 
@@ -48,6 +42,9 @@ public class webSocketHandler extends TextWebSocketHandler {
 
     @Autowired
     private MessageService messageService;
+
+    // having a websocket connections means the user is online
+    private HashMap<Long, WebSocketSession> connections = new HashMap<Long, WebSocketSession>();
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session){
@@ -70,12 +67,9 @@ public class webSocketHandler extends TextWebSocketHandler {
         JSONObject message = new JSONObject(textMessage.getPayload());
 
         String event = (String) message.get("event");
-        //WSFunctionHandler handler = handlers.get(event);
 
-        //if(handler == null)
-            //throw new IllegalArgumentException("Invalid handler of type: " + event);
-    
-        //handler.handle(getUserId(client), textMessage);
+        if(event.equals(WSEvent.CHAT.name()))
+            HandleChatEvent(getUserId(client), textMessage);
     }
 
     private void sendOnlineEventToFriendsOf(Long userId){
@@ -83,7 +77,7 @@ public class webSocketHandler extends TextWebSocketHandler {
         List<UserId> friends = friendshipService.getOnlineFriendsOf(userId);
 
         friends.forEach(friend -> {
-		    send(connections.get(friend.getUserId()), custructOnlineEventMessage(userId));
+		    send(connections.get(friend.getId()), custructOnlineEventMessage(userId));
         });
     }
 
@@ -123,7 +117,7 @@ public class webSocketHandler extends TextWebSocketHandler {
 
     private Long getUserId(WebSocketSession session){
 
-        return (Long) session.getAttributes().get("userId");
+        return Long.valueOf((String) session.getAttributes().get("userId"));
     }
 
 
