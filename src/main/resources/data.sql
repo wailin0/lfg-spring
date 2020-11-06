@@ -1,8 +1,8 @@
 INSERT INTO groups (name, topic, description, type, disabled) VALUES ('groupName1', 'groupTopic1', 'groupDescription1', 'groupType1', false);
 
-INSERT INTO Users (username, email, password, enabled, roles, ACCOUNT_NON_EXPIRED, ACCOUNT_NOT_LOCKED, CREDENTIALS_NON_EXPIRED, IS_ONLINE) VALUES ('user1', 'user1@gmai.com', 'pass', true, 'ROLE_USER', true, true, true, true);
+INSERT INTO Users (username, email, password, enabled, roles, ACCOUNT_NON_EXPIRED, ACCOUNT_NOT_LOCKED, CREDENTIALS_NON_EXPIRED, ONLINE) VALUES ('user1', 'user1@gmai.com', 'pass', true, 'ROLE_USER', true, true, true, false);
 
-INSERT INTO Users (username, email, password, enabled, roles, ACCOUNT_NON_EXPIRED, ACCOUNT_NOT_LOCKED, CREDENTIALS_NON_EXPIRED, IS_ONLINE) VALUES ('user2', 'user2@gmai.com', 'pass', true, 'ROLE_USER', true, true, true, true);
+INSERT INTO Users (username, email, password, enabled, roles, ACCOUNT_NON_EXPIRED, ACCOUNT_NOT_LOCKED, CREDENTIALS_NON_EXPIRED, ONLINE) VALUES ('user2', 'user2@gmai.com', 'pass', true, 'ROLE_USER', true, true, true, false);
 
 INSERT INTO Post (title, body, user_id, group_id) VALUES ('postTitle1', 'postBody1', (SELECT user_id FROM Users WHERE username='user1') ,(SELECT group_id FROM Groups WHERE name='groupName1'));
 

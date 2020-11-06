@@ -53,12 +53,17 @@ public class webSocketHandler extends TextWebSocketHandler {
         sendOnlineEventToFriendsOf(userId);
 
         connections.put(userId, session);
+
+        userService.setOnline(userId, true);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status){
+        Long userId = getUserId(session);
 
-        connections.remove(getUserId(session));
+        connections.remove(userId);
+
+        userService.setOnline(userId, false);
     }
 
     @Override
@@ -75,6 +80,8 @@ public class webSocketHandler extends TextWebSocketHandler {
     private void sendOnlineEventToFriendsOf(Long userId){
 
         List<UserId> friends = friendshipService.getOnlineFriendsOf(userId);
+
+        System.out.println(friends.size());
 
         friends.forEach(friend -> {
 		    send(connections.get(friend.getId()), custructOnlineEventMessage(userId));

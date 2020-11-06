@@ -50,7 +50,7 @@ public class User implements UserDetails {
     private boolean credentialsNonExpired;
     private boolean enabled;
 
-    private boolean isOnline;
+    private boolean online;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
