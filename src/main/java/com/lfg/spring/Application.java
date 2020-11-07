@@ -29,6 +29,7 @@ public class Application {
     // Because Jackson-Serializer triggers lazy loading in any cases
     @Bean
     protected Module module() {
+        
         return new Hibernate5Module();
     }
 

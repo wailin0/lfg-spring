@@ -9,12 +9,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageService {
 
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private MessageRepository messageRepository;
 
-    public Message save(Message message){
+    public Message create(Long toUser, Long fromUser, String content){
         
-        return messageRepository.save(message);
+        return messageRepository.save(Message.builder()
+            .toUser(userService.getReference(toUser))
+            .fromUser(userService.getReference(fromUser))
+            .content(content).build());
     }
 }

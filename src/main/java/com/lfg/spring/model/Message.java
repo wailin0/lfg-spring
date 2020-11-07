@@ -22,14 +22,12 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long messageId;
 
-    @MapsId
-    @OneToOne
-    @JoinColumn(name="userId", referencedColumnName="userId")
+    @ManyToOne
+    @JoinColumn(referencedColumnName="userId")
     private User toUser;
 
-    @MapsId
-    @OneToOne
-    @JoinColumn(name="userId", referencedColumnName="userId")
+    @ManyToOne
+    @JoinColumn(referencedColumnName="userId")
     private User fromUser;
 
     private Date sentAt;

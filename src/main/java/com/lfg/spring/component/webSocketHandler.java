@@ -90,23 +90,20 @@ public class webSocketHandler extends TextWebSocketHandler {
     private TextMessage custructOnlineEventMessage(Long sneder){
 
         return new TextMessage(new JSONObject()
-        .put("event", WSEvent.ONLINE.name())
-        .put("user", sneder)
-        .toString());
+            .put("event", WSEvent.ONLINE.name())
+            .put("user", sneder)
+            .toString());
     }
 
     @SneakyThrows(JSONException.class)
     private void HandleChatEvent(Long fromUser, TextMessage textMessage){
         JSONObject message = new JSONObject(textMessage.getPayload());
-        Long toUser = (Long) message.get("to");
+        Long toUser = Long.valueOf((String) message.get("touser"));
 
         if(isOnline(toUser))
             send(connections.get(toUser), textMessage);
-
-        messageService.save(Message.builder()
-            .toUser(userService.getReference((Long) message.get("touser")))
-            .fromUser(userService.getReference(fromUser))
-            .content((String) message.get("message")).build());
+        
+        messageService.create(toUser, fromUser, (String) message.get("message"));
     }
 
     private boolean isOnline(Long userId){
