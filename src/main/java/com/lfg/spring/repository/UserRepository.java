@@ -20,4 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("UPDATE User u SET u.online = :isOnline WHERE u.userId = :userId")
     public void setOnline(Long userId, boolean isOnline);
 
+    boolean existsByUsername(String username);
+
+    boolean existsByEmail(String email);
 }

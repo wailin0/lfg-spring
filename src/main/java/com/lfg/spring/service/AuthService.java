@@ -51,7 +51,7 @@ public class AuthService {
         user.setUsername(signupDto.getUsername());
         user.setEmail(signupDto.getEmail());
         user.setEnabled(true);
-        user.setRole("USER");
+        user.setRoles("USER");
         user.setCreatedAt(new Date());
         user.setPassword(passwordEncoder.encode(signupDto.getPassword()));
     
