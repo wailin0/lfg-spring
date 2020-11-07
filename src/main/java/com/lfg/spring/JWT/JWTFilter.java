@@ -2,6 +2,8 @@
 package com.lfg.spring.JWT;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.extern.slf4j.Slf4j;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import com.lfg.spring.service.UserService;
 
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class JWTFilter extends OncePerRequestFilter {
 
@@ -31,27 +34,25 @@ public class JWTFilter extends OncePerRequestFilter {
     @Autowired
     private UserService userService;
 
-    private static final Logger logger = LoggerFactory.getLogger(JWTFilter.class);
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        logger.debug("Authentication Request For '{}'", request.getRequestURL());
+        log.debug("Authentication Request For '{}'", request.getRequestURL());
+
         final String requestTokenHeader = request.getHeader("Authorization");
-        String username = null;
-        String jwtToken = null;
+
+        String username = null, jwtToken = null;
+
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
-            try {
-                username = jwtUtil.getUsernameFromToken(jwtToken);
-            } catch (IllegalArgumentException e) {
-                logger.error("JWT_TOKEN_UNABLE_TO_GET_USERNAME", e);
-            } catch (ExpiredJwtException e) {
-                logger.warn("JWT_TOKEN_EXPIRED", e);
-            }
-        } else {
-            logger.warn("JWT_TOKEN_DOES_NOT_START_WITH_BEARER_STRING");
-        }
-        logger.debug("JWT_TOKEN_USERNAME_VALUE '{}'", username);
+            try { username = jwtUtil.getUsernameFromToken(jwtToken); }
+                catch (IllegalArgumentException e) { logger.error("JWT_TOKEN_UNABLE_TO_GET_USERNAME", e); }
+                    catch (ExpiredJwtException e) { logger.warn("JWT_TOKEN_EXPIRED", e); }
+
+        } else 
+            log.warn("JWT_TOKEN_DOES_NOT_START_WITH_BEARER_STRING");
+
+        log.debug("JWT_TOKEN_USERNAME_VALUE '{}'", username);
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userService.loadUserByUsername(username);
             if (jwtUtil.validateToken(jwtToken, userDetails)) {
@@ -60,6 +61,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
             }
         }
+        
         chain.doFilter(request, response);
     }
 

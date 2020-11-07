@@ -7,32 +7,29 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-import java.util.Date;
+import com.lfg.spring.model.enums.FriendshipStatus;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Member {
+public class Friendship {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long memberId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="groupId", referencedColumnName="groupId")
-    private Group group;
+    private Long friendshipId;
 
     @MapsId
     @OneToOne
-    @JoinColumn(name="userId", referencedColumnName="userId")
+    @JoinColumn(name="userId")
     private User user;
 
-    private String role;
+    @MapsId
+    @OneToOne
+    @JoinColumn(name="friendOfId")
+    private User friendOf;
 
-    private boolean disabled;
-
-    private Date joinedAt;
+    private FriendshipStatus status;
 
 }

@@ -38,5 +38,10 @@ public class UserService implements UserDetailsService {
 
         return userRepository.save(user);
     }
+
+    public void setOnline(Long userId, boolean isOnline){
+
+        userRepository.setOnline(userId, isOnline);
+    }
         
 }

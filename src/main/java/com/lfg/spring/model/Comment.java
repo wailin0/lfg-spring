@@ -1,6 +1,5 @@
 package com.lfg.spring.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,18 +20,16 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
-    @Column(nullable = false)
     private String body;
 
     private Date createdAt;
 
-    @ManyToOne
-    @JoinColumn(nullable = false, name="userId")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="userId", referencedColumnName="userId")
     private User user;
 
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(nullable = false, name="postId")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="postId", referencedColumnName="postId")
     private Post post;
 
 }
