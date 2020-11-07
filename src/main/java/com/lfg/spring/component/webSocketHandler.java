@@ -3,9 +3,7 @@ package com.lfg.spring.component;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.lfg.spring.model.Message;
 import com.lfg.spring.model.enums.WSEvent;
 import com.lfg.spring.service.FriendshipService;
 import com.lfg.spring.service.MessageService;
@@ -42,14 +40,14 @@ public class webSocketHandler extends TextWebSocketHandler {
     @Autowired
     private MessageService messageService;
 
-    // having a websocket connections means the user is online
+    // holds userId and webscoket session
     private HashMap<Long, WebSocketSession> connections = new HashMap<Long, WebSocketSession>();
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session){
         Long userId = getUserId(session);
 
-        sendOnlineEventToFriendsOf(userId);
+        sendIsOnlineEventToFriendsOf(userId, true);
 
         connections.put(userId, session);
 
@@ -60,6 +58,8 @@ public class webSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status){
         Long userId = getUserId(session);
 
+        sendIsOnlineEventToFriendsOf(userId, false);
+
         connections.remove(userId);
 
         userService.setOnline(userId, false);
@@ -67,30 +67,32 @@ public class webSocketHandler extends TextWebSocketHandler {
 
     @Override
     @SneakyThrows(JSONException.class)
-    public void handleTextMessage(WebSocketSession client, TextMessage textMessage) throws InterruptedException, IOException {
+    public void handleTextMessage(WebSocketSession session, TextMessage textMessage) throws InterruptedException, IOException {
         JSONObject message = new JSONObject(textMessage.getPayload());
 
         String event = (String) message.get("event");
 
-        if(event.equals(WSEvent.CHAT.name()))
-            HandleChatEvent(getUserId(client), textMessage);
+        // TODO: make the function-reference-map works instead of if-else
+        if(event.equals(WSEvent.EVENT_CHAT))
+            HandleChatEvent(getUserId(session), textMessage);
     }
 
-    private void sendOnlineEventToFriendsOf(Long userId){
+    private void sendIsOnlineEventToFriendsOf(Long userId, boolean isOnline){
 
         List<Long> friends = friendshipService.getOnlineFriendsOf(userId);
 
         friends.forEach(friend -> {
 
-		    send(connections.get(friend), custructOnlineEventMessage(userId));
+		    send(connections.get(friend), custructIsOnlineEventMessage(userId, isOnline));
         });
     }
 
     @SneakyThrows(JSONException.class)
-    private TextMessage custructOnlineEventMessage(Long sneder){
+    private TextMessage custructIsOnlineEventMessage(Long sneder, boolean isOnline){
 
         return new TextMessage(new JSONObject()
-            .put("event", WSEvent.ONLINE.name())
+            .put("event", WSEvent.EVENT_CHAT)
+            .put("online", isOnline)
             .put("user", sneder)
             .toString());
     }
@@ -111,17 +113,16 @@ public class webSocketHandler extends TextWebSocketHandler {
         return connections.containsKey(userId);
     }
 
-    private void send(WebSocketSession client, TextMessage message){
+    private void send(WebSocketSession session, TextMessage message){
 
-        try { client.sendMessage(message); } 
+        try { session.sendMessage(message); } 
             catch(IOException error){ log.error("Unable to send message {}", error); }
     }
 
     private Long getUserId(WebSocketSession session){
 
+        // TODO: this casting is so eye burning please find a work around
         return Long.valueOf((String) session.getAttributes().get("userId"));
     }
-
-
 
 }

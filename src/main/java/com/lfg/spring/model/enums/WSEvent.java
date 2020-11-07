@@ -1,17 +1,11 @@
 package com.lfg.spring.model.enums;
 
-public enum WSEvent {
-    CHAT,
-    NOTIFICATION,
-    ONLINE;
+public class WSEvent {
+    
+    public static final String EVENT_CHAT = "CHAT";
+    public static final String EVENT_NOTIFICATION = "NOTIFICATION";
 
-    public String Chat(){
-
-        return CHAT.toString();
-    }
-
-    public String Notification(){
-
-        return NOTIFICATION.toString();
-    }
+    public static final String EVENT_TYPE_ONLINE = "ISONLINE";
+    public static final String EVENT_TYPE_MESSAGE = "MESSAGE";
+    
 }

@@ -25,10 +25,10 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 
-        registry.addHandler(wsHandler, "/api/all/{id}").addInterceptors(authInterceptor()).setAllowedOrigins("*");
+        registry.addHandler(wsHandler, "/{id}").addInterceptors(authInterceptor()).setAllowedOrigins("*");
     }
 
-    // to add userId attribute in the ws session
+    // to interceptor the handshake and add userid attribute in the ws session
     @Bean
     public HandshakeInterceptor authInterceptor() {
         return new HandshakeInterceptor() {
@@ -39,7 +39,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
                 String path = request.getURI().getPath();
     
                 // TODO: verify if current authenticated user is equal to this id and add is Authenticated attribute in the map
-                attributes.put("userId", path.substring(path.lastIndexOf("/") + 1));
+                attributes.put("userid", path.substring(path.lastIndexOf("/") + 1));
 
                 return true;
             }
