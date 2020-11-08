@@ -3,6 +3,7 @@ package com.lfg.spring.config;
 import java.util.Map;
 
 import com.lfg.spring.component.webSocketHandler;
+import com.lfg.spring.service.AuthService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,10 +23,13 @@ public class WebSocketConfig implements WebSocketConfigurer {
     @Autowired
     private webSocketHandler wsHandler;
 
+    @Autowired
+    private AuthService authService;
+
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 
-        registry.addHandler(wsHandler, "/{id}").addInterceptors(authInterceptor()).setAllowedOrigins("*");
+        registry.addHandler(wsHandler, "/").addInterceptors(authInterceptor()).setAllowedOrigins("*");
     }
 
     // to interceptor the handshake and add userid attribute in the ws session
@@ -35,11 +39,8 @@ public class WebSocketConfig implements WebSocketConfigurer {
             @Override
             public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, 
                   WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-                
-                String path = request.getURI().getPath();
-    
-                // TODO: verify if current authenticated user is equal to this id and add is Authenticated attribute in the map
-                attributes.put("userid", path.substring(path.lastIndexOf("/") + 1));
+                    
+                attributes.put("userid", authService.getCurrentLoggedInUser().getUserId());
 
                 return true;
             }
