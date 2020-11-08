@@ -1,5 +1,7 @@
 package com.lfg.spring.service;
 
+import java.util.List;
+
 import com.lfg.spring.model.Message;
 import com.lfg.spring.repository.MessageRepository;
 
@@ -21,5 +23,15 @@ public class MessageService {
             .toUser(userService.getReference(toUser))
             .fromUser(userService.getReference(fromUser))
             .content(content).build());
+    }
+
+    public List<Message> getByUserId(Long userId){
+
+        return messageRepository.findByUserId(userId);
+    }
+
+    public void delete(Long messageId){
+
+        messageRepository.deleteById(messageId);;
     }
 }
