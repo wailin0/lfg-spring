@@ -30,6 +30,11 @@ public class MessageService {
         return messageRepository.findByUserId(userId);
     }
 
+    public List<Message> getAll(){
+
+        return messageRepository.findAll();
+    }
+
     public void delete(Long messageId){
 
         messageRepository.deleteById(messageId);;
